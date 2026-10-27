@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algorithmic Literacy</title>
+<style>
+:root{
+  --violet-900:#241046; --violet:#3E1F7F; --violet-300:#C5BCD9; --violet-100:#DDD7EA; --violet-50:#ECE9F2;
+  --paper:#FBFAFD; --ink:#1d1830; --muted:#585270;
+  --marker:#FFD54A; --marker-soft:#FFF6D1; --marker-ink:#6b5200;
+  --accept:#14866A; --reject:#E04A5F;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--violet);text-underline-offset:.18em}
+a:hover{color:var(--violet-900)}
+main a,main p{overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--violet);padding:.6rem 1rem;z-index:100}
+.skip:focus{left:.5rem;top:.5rem}
+
+#progress{position:fixed;inset:0 0 auto 0;height:4px;background:transparent;z-index:50}
+#progress span{display:block;height:100%;width:0;background:var(--marker)}
+
+/* HERO */
+.hero{background:var(--violet);color:#fff;overflow:hidden}
+.hero-inner{max-width:78rem;margin:0 auto;padding:5rem 1.5rem 5rem;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:3rem;align-items:center;min-height:30rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,4.6vw,3.7rem);line-height:1.08;margin:0 0 1.25rem;letter-spacing:-.01em;text-wrap:balance}
+.hero p{margin:0;color:var(--violet-300);font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.45;font-weight:600;max-width:36rem;text-wrap:balance}
+.hero svg{width:100%;height:auto;max-width:25rem;justify-self:center;display:block}
+.hl{transform-origin:0 50%;animation:swipe .7s .9s cubic-bezier(.3,.7,.2,1) both}
+.strike{transform-origin:0 50%;animation:swipe .5s 1.7s ease-out both}
+.mark{stroke-dasharray:60;animation:draw .5s .4s ease-out both}
+.mark-x{stroke-dasharray:60;animation:draw .5s 1.9s ease-out both}
+@keyframes swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes draw{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+
+/* LAYOUT */
+.layout{max-width:78rem;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:14rem minmax(0,1fr);gap:3.5rem}
+.rail{position:sticky;top:0;align-self:start;padding-top:3.5rem;height:100vh;min-width:0}
+.rail ol{list-style:none;margin:0;padding:0;position:relative}
+.rail ol::before{content:"";position:absolute;left:.52rem;top:.8rem;bottom:.8rem;width:2px;background:var(--violet-100)}
+.rail li{position:relative}
+.rail a{display:block;padding:.55rem 0 .55rem 2rem;text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:600;line-height:1.3}
+.rail a::before{content:"";position:absolute;left:0;top:.85rem;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--paper);border:2px solid var(--violet-100)}
+.rail a:hover{color:var(--violet)}
+.rail li.is-done a::before{background:var(--violet);border-color:var(--violet)}
+.rail li.is-current a{color:var(--violet-900)}
+.rail li.is-current a::before{background:var(--marker);border-color:var(--violet);box-shadow:0 0 0 4px rgba(62,31,127,.14)}
+main{min-width:0;max-width:48rem;padding-bottom:6rem}
+
+section.block{padding-top:4.5rem}
+section.block:first-child{padding-top:3.5rem}
+main h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,3vw,2.2rem);line-height:1.2;margin:0 0 1.5rem;color:var(--violet-900);text-wrap:balance}
+main h2::after{content:"";display:block;width:3.5rem;height:4px;background:var(--marker);margin-top:.9rem;border-radius:2px}
+main h3{font-size:1.2rem;line-height:1.35;margin:2.75rem 0 1rem;color:var(--violet-900)}
+main p{margin:0 0 1.15rem;max-width:40rem}
+main ul{margin:0 0 1.15rem;padding-left:1.25rem;max-width:40rem}
+
+/* CALLOUT / NOTES */
+.callout{background:var(--violet-50);border-left:5px solid var(--violet);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;margin:1.75rem 0}
+.callout p{margin:0;max-width:none}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
+.notes .field{display:flex;flex-direction:column;justify-content:flex-end}
+.field label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.4rem;color:var(--violet-900)}
+textarea{width:100%;min-height:7.5rem;resize:vertical;font:inherit;font-size:1rem;line-height:1.55;padding:.75rem .9rem;border:2px solid var(--violet-100);border-radius:8px;background:#fff;color:var(--ink)}
+textarea:focus{border-color:var(--violet);outline:none;box-shadow:0 0 0 3px rgba(62,31,127,.18)}
+.tools{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:center;margin-top:1rem}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border:2px solid var(--violet);background:var(--violet);color:#fff;border-radius:999px;padding:.5rem 1.2rem;cursor:pointer}
+.btn:hover{background:var(--violet-900);border-color:var(--violet-900)}
+.btn.quiet{background:transparent;color:var(--violet)}
+.btn.quiet:hover{background:var(--violet-50);color:var(--violet-900)}
+.status{font-size:.88rem;color:var(--muted)}
+
+/* SELF CHECK */
+.check{margin:1rem 0 1.5rem;display:grid;gap:1rem}
+fieldset.item{border:0;margin:0;padding:1.1rem 1.25rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px}
+fieldset.item legend{padding:0;float:left;width:100%;font-weight:600;margin-bottom:.8rem;line-height:1.45}
+.scale{clear:both;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.scale button{width:2.7rem;height:2.7rem;border-radius:50%;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);font:inherit;font-weight:700;cursor:pointer}
+.scale button:hover{border-color:var(--violet)}
+.scale button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.ends{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:.5rem;max-width:17rem}
+
+/* AUTONOMY / COMPETENCY */
+.concept-head{display:block}
+.auto{background:var(--marker-soft);border:2px solid var(--marker);border-radius:14px;padding:1.5rem 1.75rem;margin:1rem 0 0}
+.auto p:last-child{margin-bottom:0}
+.auto-title{margin-top:2.75rem}
+.auto ul.todo{list-style:none;padding:0;margin:0}
+.todo li{margin:0 0 .55rem}
+.todo label{display:flex;gap:.75rem;align-items:flex-start;cursor:pointer}
+.todo input{margin-top:.4rem;width:1.15rem;height:1.15rem;accent-color:var(--violet);flex:none}
+.todo input:checked+span{color:var(--muted)}
+.comp{border-left:5px solid var(--violet);padding-left:1.5rem;margin-left:0}
+.comp p{max-width:38rem}
+.cite{font-weight:600}
+
+/* PATTERN CARDS */
+.pattern{list-style:none;padding:0;margin:0 0 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:.9rem;max-width:none}
+.pattern li{background:#fff;border:2px solid var(--violet-100);border-top:6px solid var(--violet);border-radius:10px;padding:1rem 1.1rem;line-height:1.5}
+.pattern strong{font-family:var(--serif);font-size:1.2rem;color:var(--violet-900)}
+
+/* JUDGEMENT */
+.lenses{list-style:none;padding:0;margin:0 0 1.5rem;display:grid;gap:.8rem;max-width:none}
+.lenses li{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem}
+.lenses .q{margin:0 0 .75rem;max-width:none;line-height:1.5}
+.lenses .q strong{color:var(--violet-900)}
+.yn{display:flex;flex-wrap:wrap;gap:.6rem}
+.yn button{font:inherit;font-weight:600;font-size:.95rem;min-height:2.6rem;padding:.4rem 1.3rem;border-radius:999px;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);cursor:pointer}
+.yn button:hover{border-color:var(--violet)}
+.yn button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.lenses textarea{min-height:5.5rem}
+
+/* MEDIA */
+figure.info{margin:2rem 0;max-width:none}
+figure.info button{display:block;width:100%;padding:0;border:2px solid var(--violet-100);border-radius:12px;background:#fff;cursor:zoom-in;overflow:hidden}
+figure.info img{display:block;width:100%;height:auto}
+figure.map{max-width:32rem}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:.6rem;max-width:none}
+.audio{background:var(--violet-50);border-radius:12px;padding:1rem 1.25rem;margin:1rem 0 2rem}
+.audio strong{display:block;margin-bottom:.6rem;color:var(--violet-900)}
+.audio audio{width:100%}
+dialog{border:0;padding:0;max-width:min(96vw,1400px);background:transparent}
+dialog::backdrop{background:rgba(20,10,40,.82)}
+dialog img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}
+dialog .btn{position:absolute;top:.75rem;right:.75rem}
+
+.ph{min-height:9.5rem;border:2px dashed var(--violet-300);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;margin:2rem 0;color:var(--violet-900)}
+
+/* STARTERS */
+.starters{display:grid;gap:1rem;margin:1.25rem 0 1.75rem}
+.starters .field label{font-weight:600}
+
+.refs p{font-size:.95rem;color:var(--muted);max-width:42rem;padding-left:1.5rem;text-indent:-1.5rem}
+
+/* RESPONSIVE */
+@media (max-width:60rem){
+  .hero-inner{grid-template-columns:1fr;padding:3.5rem 1.5rem;min-height:0}
+  .hero svg{max-width:17rem;justify-self:start}
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{position:sticky;top:0;z-index:40;height:auto;padding:0;margin:0 -1.5rem;background:var(--paper);border-bottom:2px solid var(--violet-100)}
+  .rail ol{display:flex;overflow-x:auto;padding:.25rem 1.5rem}
+  .rail ol::before{display:none}
+  .rail a{padding:.7rem .9rem;white-space:nowrap}
+  .rail a::before{display:none}
+  .rail li.is-current a{box-shadow:inset 0 -4px 0 var(--marker)}
+  .rail li.is-done a{color:var(--violet)}
+  section.block:first-child{padding-top:2.5rem}
+}
+@media (max-width:40rem){
+  main{max-width:100%}
+  .notes,.pattern{grid-template-columns:1fr}
+  .auto{padding:1.25rem}
+  .comp{padding-left:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hl,.strike,.mark,.mark-x{animation:none}
+}
+@media print{
+  #progress,.rail,.tools,.hero svg{display:none}
+  .layout{display:block}
+  body{background:#fff}
+  .hero{background:#fff;color:#000}
+  .hero p{color:#333}
+}
+
+.yn button{font-size:.9rem;padding:.35rem .8rem}
+.item{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem;margin:0 0 .9rem}
+.item p{max-width:none}.item .q{margin:0 0 .6rem;font-weight:600}
+.qs{display:grid;gap:1rem;margin:1rem 0}
+.qs .field label{font-weight:600;font-size:1rem;color:var(--violet-900)}
+.promptcard{background:#fff;border-left:5px solid var(--marker);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(36,16,70,.06)}
+.promptcard p{margin:0;max-width:none}.promptcard .lab{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.draft{background:#FFF1D6;border:2px dashed #d98a00;border-radius:10px;padding:.8rem 1.1rem;margin:1rem 0;font-size:.95rem}
+.draft strong{color:#8a5500}
+.draft p{margin:0;max-width:none}
+.rate{display:grid;grid-template-columns:1fr;gap:.35rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:.8rem 1rem;margin:0 0 .7rem}
+.rate h4{margin:0 0 .3rem;font-size:1rem;color:var(--violet-900)}
+.rate .row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.rate .row span{min-width:11rem;font-size:.92rem;color:var(--muted)}
+details.reveal{margin:.6rem 0 1rem}details.reveal summary{cursor:pointer;font-weight:600;color:var(--violet)}
+details.reveal p{margin:.5rem 0 0}
+
+.yn.long{flex-direction:column;align-items:stretch}
+.yn.long button{text-align:left;border-radius:14px;line-height:1.45;padding:.6rem 1rem}
+.fb{display:none;margin:.6rem 0 0;padding:.6rem .9rem;border-radius:10px;background:#EAF7F1;border:2px solid #14866A;font-size:.95rem}
+.fb.show{display:block}
+.pbuild{background:#fff;border:2px dashed #8d7fb0;border-radius:12px;padding:.8rem 1rem;margin:.8rem 0}
+.pbuild code{display:block;white-space:pre-wrap;font-family:Consolas,Monaco,monospace;font-size:.92rem;color:#2b2150}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero"><div class="hero-inner"><div>
+  <h1>Algorithmic Literacy</h1>
+  <p>Seeing, questioning and shaping the systems that shape what we see, know and decide</p>
+  <p style="margin-top:.75rem;font-weight:400;font-size:1rem">Enhancing Literacy and Numeracy Skills Using AI. Online preparation, about 90 minutes. Designed by Kelly Ilich.</p>
+</div><svg viewBox="0 0 380 460" role="img" aria-label="A page of draft text marked up by a teacher: one line ticked, one highlighted, one crossed out">
+      <rect x="20" y="20" width="340" height="420" rx="14" fill="#fff"/>
+      <g fill="#D9D3E8">
+        <rect x="70" y="58" width="250" height="12" rx="6"/>
+        <rect x="70" y="94" width="270" height="12" rx="6" fill="#C9C0DF" transform="translate(0,0)"/>
+        <rect x="70" y="130" width="200" height="12" rx="6"/>
+        <rect x="70" y="166" width="270" height="12" rx="6"/>
+        <rect x="70" y="202" width="240" height="12" rx="6"/>
+        <rect x="70" y="238" width="270" height="12" rx="6"/>
+        <rect x="70" y="274" width="170" height="12" rx="6"/>
+        <rect x="70" y="310" width="260" height="12" rx="6"/>
+        <rect x="70" y="346" width="226" height="12" rx="6"/>
+        <rect x="70" y="382" width="140" height="12" rx="6"/>
+      </g>
+      <rect class="hl" x="62" y="86" width="286" height="28" rx="4" fill="#FFD54A" opacity=".85"/>
+      <rect x="70" y="94" width="270" height="12" rx="6" fill="#8d7fb0" opacity=".55"/>
+      <path class="mark" d="M34 66 l9 10 l17 -22" fill="none" stroke="#14866A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="mark-x" d="M36 128 l16 16 M52 128 l-16 16" fill="none" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+      <line class="strike" x1="62" y1="136.5" x2="282" y2="136.5" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+    </svg></div></header>
+<div class="layout">
+<nav class="rail" aria-label="Sections"><ol><li><a href="#ground">Ground</a></li><li><a href="#readiness">Readiness</a></li><li><a href="#concept-1">Concept 1</a></li><li><a href="#express">Express</a></li><li><a href="#after">After the live session</a></li><li><a href="#references">References</a></li></ol></nav>
+<main id="main">
+
+
+<section class="block" id="ground">
+  <h2>Name one algorithm that shapes your day</h2>
+  <div class="callout"><p><strong>What you will be able to do</strong></p><ul><li>Explain the three dimensions of algorithmic literacy: cognitive, affective, and behaviour-related</li><li>Explain how algorithmic systems including AI tools produce their outputs and what they are optimised for, including their capabilities and limitations</li><li>Critically evaluate whose interests an algorithmic system serves, and how it might shape what you see, know and decide in your own teaching/ mentoring.</li><li>Apply strategies to shape AI output in your own context, such as prompting a tool to challenge rather than agree.</li></ul></div>
+  <p>This is a 2 minute reflection. Name one algorithm that shapes your day (a recommendation feed, a maps app) and one time its output was unhelpful or surprising.</p>
+  <div class="qs"><div class="field"><label for="g1">One algorithm that shapes my day...</label><textarea id="g1" data-key="g1"></textarea></div><div class="field"><label for="g2">One time its output was unhelpful or surprising...</label><textarea id="g2" data-key="g2"></textarea></div></div>
+</section>
+<section class="block" id="readiness">
+  <h2>A short quiz: where are you now?</h2>
+  <p>This quiz looks at three dimensions of algorithmic literacy: knowing (cognitive), evaluating (affective) and acting (behavioural). Choose the answer closest to what you would do. After each answer you will see a short note.</p>
+  <h3>Cognitive dimension</h3><div class="item"><p class="q">1. You search for a teaching resource and the top results are all very similar. What is your first thought?</p><div class="yn long" role="group" aria-label="1. You search for a teaching resource and the top results are all very similar. What is your first thought?" data-key="q1" data-label="1. You search for a teaching resource and the top results are all very similar. What is your first thought?" data-opts="A. Someone set rules for ranking, but I’m not sure how they decide.|B. The best results rank first, which is why they’re at the top.|C. The ranking is optimised for something, such as clicks, popularity or advertiser value, and I can name how that might favour some resources." data-fb="Rankings and outputs are design choices, not neutral facts. Asking what a system is optimised for is the starting point."></div><div class="fb" aria-live="polite"></div></div><div class="item"><p class="q">2. A colleague says, “The chatbot knows the answer. It just looked it up.” What is your response?</p><div class="yn long" role="group" aria-label="2. A colleague says, “The chatbot knows the answer. It just looked it up.” What is your response?" data-key="q2" data-label="2. A colleague says, “The chatbot knows the answer. It just looked it up.” What is your response?" data-opts="A. It predicts likely words from patterns in its training data, and it’s tuned to seem helpful. It can sound right without checking facts.|B. I think it’s trained on a lot of data, but I couldn’t explain how it produces a particular answer.|C. I agree. It’s like a very fast search engine." data-fb="Generative AI predicts plausible text. It doesn’t look facts up or know when it is wrong, and it is shaped to feel helpful."></div><div class="fb" aria-live="polite"></div></div><h3>Affective dimension</h3><div class="item"><p class="q">3. You ask a chatbot to review your lesson idea and it replies, “Excellent idea!” What do you do?</p><div class="yn long" role="group" aria-label="3. You ask a chatbot to review your lesson idea and it replies, “Excellent idea!” What do you do?" data-key="q3" data-label="3. You ask a chatbot to review your lesson idea and it replies, “Excellent idea!” What do you do?" data-opts="A. I take it as a sign the idea is good.|B. I’d stop and ask whether it’s agreeing too easily, then ask it for weaknesses and counterarguments. I can say why a tool might be tuned to please.|C. I might wonder if it’s too positive, but usually only if someone points it out." data-fb="Praise isn’t evidence of quality. Ask for weaknesses to test whether the tool is just agreeing."></div><div class="fb" aria-live="polite"></div></div><div class="item"><p class="q">4. Your institution recommends a free AI app for PPG students. What do you ask?</p><div class="yn long" role="group" aria-label="4. Your institution recommends a free AI app for PPG students. What do you ask?" data-key="q4" data-label="4. Your institution recommends a free AI app for PPG students. What do you ask?" data-opts="A. Nothing. If it’s recommended, it’s fine.|B. I’d ask about features and cost, and about fairness if someone raised it.|C. Who benefits, what the app collects, and who might be left out (access, language). I could justify my concerns to a colleague." data-fb="“Free” tools are paid for somehow. Ask who benefits, what is collected and who is left out."></div><div class="fb" aria-live="polite"></div></div><h3>Behavior-related dimension</h3><div class="item"><p class="q">5. When did you last change how you use an algorithmic tool because of something you learned about it?</p><div class="yn long" role="group" aria-label="5. When did you last change how you use an algorithmic tool because of something you learned about it?" data-key="q5" data-label="5. When did you last change how you use an algorithmic tool because of something you learned about it?" data-opts="A. I tried one change, such as a second source or a setting, but I haven’t kept it up.|B. I haven’t. I use these tools the same way as before.|C. I change my use regularly, and I can explain the trade-off I accepted and have shown others." data-fb="Knowing about a system matters most when it changes what you do. One kept change counts."></div><div class="fb" aria-live="polite"></div></div><div class="item"><p class="q">6. A chatbot keeps agreeing with you. What do you do?</p><div class="yn long" role="group" aria-label="6. A chatbot keeps agreeing with you. What do you do?" data-key="q6" data-label="6. A chatbot keeps agreeing with you. What do you do?" data-opts="A. Keep going. It’s helpful.|B. I’ve asked “are you sure?” once or twice, but it’s not a habit.|C. I use an instruction or prompt that makes it challenge me, and I know what I give up in speed or comfort." data-fb="Instructions that ask the tool to challenge you often change its behaviour, but you still need to check what it says."></div><div class="fb" aria-live="polite"></div></div>
+  
+</section>
+<section class="block" id="concept-1">
+  <h2>Concept 1: Does the tool agree too easily?</h2>
+  <h3 class="auto-title">Test an AI tool</h3><div class="auto">
+  <p>Pick a topic from your own teaching or mentoring and open an AI tool of your choice. Write a short draft idea of your own, such as a lesson outline or activity in three or four sentences, with no student data. Ask the tool for feedback on it. Note how it responds. Is it mostly praise?</p>
+  <div class="ph" role="note"><strong>Placeholder - Approved AI tool link or list (to be confirmed)</strong></div>
+  <div class="qs"><div class="field"><label for="a1">The topic from my teaching or mentoring...</label><textarea id="a1" data-key="a1"></textarea></div><div class="field"><label for="a2">My short draft idea (three or four sentences, no student data)...</label><textarea id="a2" data-key="a2"></textarea></div></div>
+  <div class="item"><p class="q">How did the tool respond to my idea?</p><div class="yn " role="group" aria-label="How the tool responded to my idea" data-key="a3" data-label="How the tool responded to my idea" data-opts="Mostly praise|A mix|Mostly critical"></div></div>
+  <p>Run at least two of the probes below.</p>
+  <div class="starters"><ul><li><strong>Push back:</strong> reply &ldquo;Are you sure?&rdquo; or &ldquo;I think that&rsquo;s wrong&rdquo; to something it said that was right. Does it hold its position or reverse?</li><li><strong>Fish for agreement:</strong> state a questionable claim about teaching as if you believe it. Does it correct you or go along?</li><li><strong>Ask for the weakest points:</strong> &ldquo;What are the three biggest weaknesses of my idea?&rdquo; Compare this with the first response.</li><li><strong>Same prompt again:</strong> what stays the same, and what changes?</li></ul></div>
+  <div class="item"><p class="q">The probes I ran</p><div class="yn " role="group" aria-label="Probes I ran" data-key="a4" data-label="Probes I ran" data-opts="Push back|Fish for agreement|Ask for the weakest points|Same prompt again" data-multi="1"></div></div>
+  <div class="qs"><div class="field"><label for="a5">What happened when I ran the probes?</label><textarea id="a5" data-key="a5"></textarea></div></div>
+  <p>Add an instruction asking it to challenge you rather than agree, then repeat.</p>
+  <div class="promptcard"><p class="lab">For example</p><p>&ldquo;Act as a critical colleague. Tell me where this idea is weak before saying what is strong.&rdquo;</p></div>
+  <div class="qs"><div class="field"><label for="a6">Record what changed and what didn’t.</label><textarea id="a6" data-key="a6"></textarea></div><div class="field"><label for="a7">Extension: what else could you do to find out whether the tool is agreeing too easily?</label><textarea id="a7" data-key="a7"></textarea></div></div></div>
+  <h3>Build understanding</h3>
+  <div class="comp"><p>Watch the short video explaining:</p><ul><li>Fundamentals of algorithmic literacy (cognitive, affective, behavioural dimensions)</li><li>How AI produces outputs and what they are optimised for</li><li>What AI does well, and under what conditions (e.g. drafting, reformatting, generating options/ examples/ scenarios). Conditions: clear prompts, real contexts, critical review by the teacher. AI is a scaffold, not a replacement for professional judgement.</li><li>The limitations of AI</li><li>Strategies for addressing some of the limitations</li></ul></div>
+  <div class="ph" role="note"><strong>Placeholder - Short video: fundamentals of algorithmic literacy (to be supplied)</strong></div>
+  <div class="qs"><div class="field"><label for="b1">Review the earlier AI output. What did the tool do when you asked for feedback, pushed back, asked for weaknesses or added the challenge instruction? Note what it did and why a tool might be designed to behave that way.</label><textarea id="b1" data-key="b1"></textarea></div><div class="field"><label for="b2">Whose interests might a tool tuned to agree with you serve? In one or two sentences, say how that could shape what you see, know and decide in your own teaching or mentoring.</label><textarea id="b2" data-key="b2"></textarea></div><div class="field"><label for="b3">Choose one strategy from the video or your own test that you could use in your context, and note the trade-off.</label><textarea id="b3" data-key="b3"></textarea></div></div>
+</section>
+<section class="block" id="express">
+  <h2>Share in the shared space</h2>
+  <p>In the shared space, list:</p>
+  <div class="qs"><div class="field"><label for="e1">One thing the tool seemed designed to do that I hadn’t noticed.</label><textarea id="e1" data-key="e1"></textarea></div><div class="field"><label for="e2">One strategy I will use in my own teaching or mentoring, and the trade-off I accept.</label><textarea id="e2" data-key="e2"></textarea></div></div>
+  <p>Read two or three posts from others and add a brief reply to one.</p>
+  <div class="ph" role="note"><strong>Placeholder - Padlet or approved shared space</strong></div>
+  <div class="tools"><button type="button" class="btn" data-export>Download my responses</button><span class="status">Everything you enter on this page is saved on this device only. This file includes all of it.</span></div>
+</section>
+<section class="block" id="after"><h2>After the live session: archive and revision layer</h2><p>Return to this page after the live session. The recording and slides will be added here, and this is where you come back while you write your assessment.</p><div class="ph" role="note"><strong>Placeholder - Echo360 or approved recording link: live session recording</strong></div><div class="ph" role="note"><strong>Placeholder - PDF of live-session slides</strong></div></section>
+<section class="block refs" id="references">
+  <h2>References</h2>
+  <p>Moylan, R., &amp; Code, J. (2024). Algorithmic futures: An analysis of teacher professional digital competence frameworks through an algorithm literacy lens. <em>Teachers and Teaching, 30</em>(4), 452&ndash;470. <a href="https://doi.org/10.1080/13540602.2023.2263732" target="_blank" rel="noopener">https://doi.org/10.1080/13540602.2023.2263732</a></p>
+</section>
+
+
+</main></div>
+<script>
+(function(){
+  var P='alg:';
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  document.querySelectorAll('textarea[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.yn').forEach(function(g){
+    var key=g.dataset.key,multi=!!g.dataset.multi,cur=get(key),sel=[];
+    if(multi){try{sel=JSON.parse(cur||'[]')}catch(e){}}
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;
+      b.setAttribute('aria-pressed',String(multi?sel.indexOf(o)>-1:cur===o));
+      b.addEventListener('click',function(){
+        if(multi){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));var l=[];g.querySelectorAll('button').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')l.push(x.textContent)});set(key,JSON.stringify(l))}
+        else{var was=b.getAttribute('aria-pressed')==='true';g.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});if(was){set(key,'')}else{b.setAttribute('aria-pressed','true');set(key,o)}}
+        g.dispatchEvent(new CustomEvent('chosen'));});
+      g.appendChild(b)});
+  });
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  var NONE='(no response)';
+  function collect(){
+    var o=['Algorithmic Literacy: seeing, questioning and shaping the systems that shape what we see, know and decide','My responses (online preparation)',''];
+    document.querySelectorAll('main section.block').forEach(function(sec){
+      if(sec.id==='references')return;
+      o.push(norm(sec.querySelector('h2').textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){var ans;if(el.tagName==='TEXTAREA')ans=el.value.trim();else if(el.classList.contains('yn')){ans=get(el.dataset.key);if(el.dataset.multi){try{ans=JSON.parse(ans||'[]').join(', ')}catch(e){ans=''}}}else return;o.push(labelFor(el),'  '+(ans||NONE))});
+      o.push('');
+    });
+    return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-algorithmic-literacy.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.35,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+<script>(function(){var P='alg:';function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+
+document.querySelectorAll('.yn[data-fb]').forEach(function(g){var fb=g.parentNode.querySelector('.fb');function show(){if(get(g.dataset.key)){fb.textContent=g.dataset.fb;fb.classList.add('show')}else{fb.classList.remove('show')}}g.addEventListener('chosen',show);show()});
+})();</script>
+</body>
+</html>

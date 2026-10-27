@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Supported Literacy Teaching</title>
+<style>
+:root{
+  --violet-900:#241046; --violet:#3E1F7F; --violet-300:#C5BCD9; --violet-100:#DDD7EA; --violet-50:#ECE9F2;
+  --paper:#FBFAFD; --ink:#1d1830; --muted:#585270;
+  --marker:#FFD54A; --marker-soft:#FFF6D1; --marker-ink:#6b5200;
+  --accept:#14866A; --reject:#E04A5F;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--violet);text-underline-offset:.18em}
+a:hover{color:var(--violet-900)}
+main a,main p{overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--violet);padding:.6rem 1rem;z-index:100}
+.skip:focus{left:.5rem;top:.5rem}
+
+#progress{position:fixed;inset:0 0 auto 0;height:4px;background:transparent;z-index:50}
+#progress span{display:block;height:100%;width:0;background:var(--marker)}
+
+/* HERO */
+.hero{background:var(--violet);color:#fff;overflow:hidden}
+.hero-inner{max-width:78rem;margin:0 auto;padding:5rem 1.5rem 5rem;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:3rem;align-items:center;min-height:30rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,4.6vw,3.7rem);line-height:1.08;margin:0 0 1.25rem;letter-spacing:-.01em;text-wrap:balance}
+.hero p{margin:0;color:var(--violet-300);font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.45;font-weight:600;max-width:36rem;text-wrap:balance}
+.hero svg{width:100%;height:auto;max-width:25rem;justify-self:center;display:block}
+.hl{transform-origin:0 50%;animation:swipe .7s .9s cubic-bezier(.3,.7,.2,1) both}
+.strike{transform-origin:0 50%;animation:swipe .5s 1.7s ease-out both}
+.mark{stroke-dasharray:60;animation:draw .5s .4s ease-out both}
+.mark-x{stroke-dasharray:60;animation:draw .5s 1.9s ease-out both}
+@keyframes swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes draw{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+
+/* LAYOUT */
+.layout{max-width:78rem;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:14rem minmax(0,1fr);gap:3.5rem}
+.rail{position:sticky;top:0;align-self:start;padding-top:3.5rem;height:100vh;min-width:0}
+.rail ol{list-style:none;margin:0;padding:0;position:relative}
+.rail ol::before{content:"";position:absolute;left:.52rem;top:.8rem;bottom:.8rem;width:2px;background:var(--violet-100)}
+.rail li{position:relative}
+.rail a{display:block;padding:.55rem 0 .55rem 2rem;text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:600;line-height:1.3}
+.rail a::before{content:"";position:absolute;left:0;top:.85rem;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--paper);border:2px solid var(--violet-100)}
+.rail a:hover{color:var(--violet)}
+.rail li.is-done a::before{background:var(--violet);border-color:var(--violet)}
+.rail li.is-current a{color:var(--violet-900)}
+.rail li.is-current a::before{background:var(--marker);border-color:var(--violet);box-shadow:0 0 0 4px rgba(62,31,127,.14)}
+main{min-width:0;max-width:48rem;padding-bottom:6rem}
+
+section.block{padding-top:4.5rem}
+section.block:first-child{padding-top:3.5rem}
+main h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,3vw,2.2rem);line-height:1.2;margin:0 0 1.5rem;color:var(--violet-900);text-wrap:balance}
+main h2::after{content:"";display:block;width:3.5rem;height:4px;background:var(--marker);margin-top:.9rem;border-radius:2px}
+main h3{font-size:1.2rem;line-height:1.35;margin:2.75rem 0 1rem;color:var(--violet-900)}
+main p{margin:0 0 1.15rem;max-width:40rem}
+main ul{margin:0 0 1.15rem;padding-left:1.25rem;max-width:40rem}
+
+/* CALLOUT / NOTES */
+.callout{background:var(--violet-50);border-left:5px solid var(--violet);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;margin:1.75rem 0}
+.callout p{margin:0;max-width:none}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
+.notes .field{display:flex;flex-direction:column;justify-content:flex-end}
+.field label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.4rem;color:var(--violet-900)}
+textarea{width:100%;min-height:7.5rem;resize:vertical;font:inherit;font-size:1rem;line-height:1.55;padding:.75rem .9rem;border:2px solid var(--violet-100);border-radius:8px;background:#fff;color:var(--ink)}
+textarea:focus{border-color:var(--violet);outline:none;box-shadow:0 0 0 3px rgba(62,31,127,.18)}
+.tools{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:center;margin-top:1rem}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border:2px solid var(--violet);background:var(--violet);color:#fff;border-radius:999px;padding:.5rem 1.2rem;cursor:pointer}
+.btn:hover{background:var(--violet-900);border-color:var(--violet-900)}
+.btn.quiet{background:transparent;color:var(--violet)}
+.btn.quiet:hover{background:var(--violet-50);color:var(--violet-900)}
+.status{font-size:.88rem;color:var(--muted)}
+
+/* SELF CHECK */
+.check{margin:1rem 0 1.5rem;display:grid;gap:1rem}
+fieldset.item{border:0;margin:0;padding:1.1rem 1.25rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px}
+fieldset.item legend{padding:0;float:left;width:100%;font-weight:600;margin-bottom:.8rem;line-height:1.45}
+.scale{clear:both;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.scale button{width:2.7rem;height:2.7rem;border-radius:50%;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);font:inherit;font-weight:700;cursor:pointer}
+.scale button:hover{border-color:var(--violet)}
+.scale button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.ends{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:.5rem;max-width:17rem}
+
+/* AUTONOMY / COMPETENCY */
+.concept-head{display:block}
+.auto{background:var(--marker-soft);border:2px solid var(--marker);border-radius:14px;padding:1.5rem 1.75rem;margin:1rem 0 0}
+.auto p:last-child{margin-bottom:0}
+.auto-title{margin-top:2.75rem}
+.auto ul.todo{list-style:none;padding:0;margin:0}
+.todo li{margin:0 0 .55rem}
+.todo label{display:flex;gap:.75rem;align-items:flex-start;cursor:pointer}
+.todo input{margin-top:.4rem;width:1.15rem;height:1.15rem;accent-color:var(--violet);flex:none}
+.todo input:checked+span{color:var(--muted)}
+.comp{border-left:5px solid var(--violet);padding-left:1.5rem;margin-left:0}
+.comp p{max-width:38rem}
+.cite{font-weight:600}
+
+/* PATTERN CARDS */
+.pattern{list-style:none;padding:0;margin:0 0 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:.9rem;max-width:none}
+.pattern li{background:#fff;border:2px solid var(--violet-100);border-top:6px solid var(--violet);border-radius:10px;padding:1rem 1.1rem;line-height:1.5}
+.pattern strong{font-family:var(--serif);font-size:1.2rem;color:var(--violet-900)}
+
+/* JUDGEMENT */
+.lenses{list-style:none;padding:0;margin:0 0 1.5rem;display:grid;gap:.8rem;max-width:none}
+.lenses li{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem}
+.lenses .q{margin:0 0 .75rem;max-width:none;line-height:1.5}
+.lenses .q strong{color:var(--violet-900)}
+.yn{display:flex;flex-wrap:wrap;gap:.6rem}
+.yn button{font:inherit;font-weight:600;font-size:.95rem;min-height:2.6rem;padding:.4rem 1.3rem;border-radius:999px;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);cursor:pointer}
+.yn button:hover{border-color:var(--violet)}
+.yn button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.lenses textarea{min-height:5.5rem}
+
+/* MEDIA */
+figure.info{margin:2rem 0;max-width:none}
+figure.info button{display:block;width:100%;padding:0;border:2px solid var(--violet-100);border-radius:12px;background:#fff;cursor:zoom-in;overflow:hidden}
+figure.info img{display:block;width:100%;height:auto}
+figure.map{max-width:32rem}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:.6rem;max-width:none}
+.audio{background:var(--violet-50);border-radius:12px;padding:1rem 1.25rem;margin:1rem 0 2rem}
+.audio strong{display:block;margin-bottom:.6rem;color:var(--violet-900)}
+.audio audio{width:100%}
+dialog{border:0;padding:0;max-width:min(96vw,1400px);background:transparent}
+dialog::backdrop{background:rgba(20,10,40,.82)}
+dialog img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}
+dialog .btn{position:absolute;top:.75rem;right:.75rem}
+
+.ph{min-height:9.5rem;border:2px dashed var(--violet-300);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;margin:2rem 0;color:var(--violet-900)}
+
+/* STARTERS */
+.starters{display:grid;gap:1rem;margin:1.25rem 0 1.75rem}
+.starters .field label{font-weight:600}
+
+.refs p{font-size:.95rem;color:var(--muted);max-width:42rem;padding-left:1.5rem;text-indent:-1.5rem}
+
+/* RESPONSIVE */
+@media (max-width:60rem){
+  .hero-inner{grid-template-columns:1fr;padding:3.5rem 1.5rem;min-height:0}
+  .hero svg{max-width:17rem;justify-self:start}
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{position:sticky;top:0;z-index:40;height:auto;padding:0;margin:0 -1.5rem;background:var(--paper);border-bottom:2px solid var(--violet-100)}
+  .rail ol{display:flex;overflow-x:auto;padding:.25rem 1.5rem}
+  .rail ol::before{display:none}
+  .rail a{padding:.7rem .9rem;white-space:nowrap}
+  .rail a::before{display:none}
+  .rail li.is-current a{box-shadow:inset 0 -4px 0 var(--marker)}
+  .rail li.is-done a{color:var(--violet)}
+  section.block:first-child{padding-top:2.5rem}
+}
+@media (max-width:40rem){
+  main{max-width:100%}
+  .notes,.pattern{grid-template-columns:1fr}
+  .auto{padding:1.25rem}
+  .comp{padding-left:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hl,.strike,.mark,.mark-x{animation:none}
+}
+@media print{
+  #progress,.rail,.tools,.hero svg{display:none}
+  .layout{display:block}
+  body{background:#fff}
+  .hero{background:#fff;color:#000}
+  .hero p{color:#333}
+}
+
+.yn button{font-size:.9rem;padding:.35rem .8rem}
+.item{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem;margin:0 0 .9rem}
+.item p{max-width:none}.item .q{margin:0 0 .6rem;font-weight:600}
+.qs{display:grid;gap:1rem;margin:1rem 0}
+.qs .field label{font-weight:600;font-size:1rem;color:var(--violet-900)}
+.promptcard{background:#fff;border-left:5px solid var(--marker);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(36,16,70,.06)}
+.promptcard p{margin:0;max-width:none}.promptcard .lab{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.draft{background:#FFF1D6;border:2px dashed #d98a00;border-radius:10px;padding:.8rem 1.1rem;margin:1rem 0;font-size:.95rem}
+.draft strong{color:#8a5500}
+.draft p{margin:0;max-width:none}
+.rate{display:grid;grid-template-columns:1fr;gap:.35rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:.8rem 1rem;margin:0 0 .7rem}
+.rate h4{margin:0 0 .3rem;font-size:1rem;color:var(--violet-900)}
+.rate .row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.rate .row span{min-width:11rem;font-size:.92rem;color:var(--muted)}
+details.reveal{margin:.6rem 0 1rem}details.reveal summary{cursor:pointer;font-weight:600;color:var(--violet)}
+details.reveal p{margin:.5rem 0 0}
+
+.yn.long{flex-direction:column;align-items:stretch}
+.yn.long button{text-align:left;border-radius:14px;line-height:1.45;padding:.6rem 1rem}
+.fb{display:none;margin:.6rem 0 0;padding:.6rem .9rem;border-radius:10px;background:#EAF7F1;border:2px solid #14866A;font-size:.95rem}
+.fb.show{display:block}
+.pbuild{background:#fff;border:2px dashed #8d7fb0;border-radius:12px;padding:.8rem 1rem;margin:.8rem 0}
+.pbuild code{display:block;white-space:pre-wrap;font-family:Consolas,Monaco,monospace;font-size:.92rem;color:#2b2150}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero"><div class="hero-inner"><div>
+  <h1>AI-Supported Literacy Teaching</h1>
+  <p>Using generative AI to support listening, speaking, reading and writing</p>
+  <p style="margin-top:.75rem;font-weight:400;font-size:1rem">Enhancing Literacy and Numeracy Skills Using AI. Online preparation, about 90 minutes. Designed by Tamara Reads.</p>
+</div><svg viewBox="0 0 380 460" role="img" aria-label="A page of draft text marked up by a teacher: one line ticked, one highlighted, one crossed out">
+      <rect x="20" y="20" width="340" height="420" rx="14" fill="#fff"/>
+      <g fill="#D9D3E8">
+        <rect x="70" y="58" width="250" height="12" rx="6"/>
+        <rect x="70" y="94" width="270" height="12" rx="6" fill="#C9C0DF" transform="translate(0,0)"/>
+        <rect x="70" y="130" width="200" height="12" rx="6"/>
+        <rect x="70" y="166" width="270" height="12" rx="6"/>
+        <rect x="70" y="202" width="240" height="12" rx="6"/>
+        <rect x="70" y="238" width="270" height="12" rx="6"/>
+        <rect x="70" y="274" width="170" height="12" rx="6"/>
+        <rect x="70" y="310" width="260" height="12" rx="6"/>
+        <rect x="70" y="346" width="226" height="12" rx="6"/>
+        <rect x="70" y="382" width="140" height="12" rx="6"/>
+      </g>
+      <rect class="hl" x="62" y="86" width="286" height="28" rx="4" fill="#FFD54A" opacity=".85"/>
+      <rect x="70" y="94" width="270" height="12" rx="6" fill="#8d7fb0" opacity=".55"/>
+      <path class="mark" d="M34 66 l9 10 l17 -22" fill="none" stroke="#14866A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="mark-x" d="M36 128 l16 16 M52 128 l-16 16" fill="none" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+      <line class="strike" x1="62" y1="136.5" x2="282" y2="136.5" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+    </svg></div></header>
+<div class="layout">
+<nav class="rail" aria-label="Sections"><ol><li><a href="#ground">Ground</a></li><li><a href="#readiness">Readiness</a></li><li><a href="#concept-1">Concept 1</a></li><li><a href="#concept-2">Concept 2</a></li><li><a href="#concept-3">Concept 3</a></li><li><a href="#before-live">Before the live session</a></li><li><a href="#express">Express</a></li><li><a href="#after">After the live session</a></li></ol></nav>
+<main id="main">
+
+
+<section class="block" id="ground">
+  <h2>How is literacy understood in Indonesia?</h2>
+  <div class="callout"><p><strong>What you will be able to do</strong></p><ul><li>Identify opportunities and challenges in using AI to support literacy in the four domains (listening, speaking, reading, and writing)</li><li>Select a literacy learning goal and choose an AI-supported activity</li><li>Write and refine prompts to generate, adapt, and critique literacy learning materials</li><li>Design an inclusive literacy lesson or activity that keeps student thinking and teacher judgement central</li></ul></div>
+  <p>How is literacy understood in Indonesia? What kinds of literacy challenges do your students face?</p>
+  <div class="ph" role="note"><strong>Placeholder - Readings or video: to be identified (Tamara to confirm)</strong></div>
+  <div class="qs"><div class="field"><label for="g1">How is literacy understood in Indonesia?</label><textarea id="g1" data-key="g1"></textarea></div><div class="field"><label for="g2">What kinds of literacy challenges do your students face?</label><textarea id="g2" data-key="g2"></textarea></div></div>
+</section>
+<section class="block" id="readiness">
+  <h2>Check in: where are you starting from?</h2>
+  <p>Please complete this before the live session.</p>
+  <div class="qs"><div class="field"><label for="r1">What is the significance of literacy in the Indonesian curriculum and education system?</label><textarea id="r1" data-key="r1"></textarea></div><div class="field"><label for="r2">How would you explain the important elements of literacy?</label><textarea id="r2" data-key="r2"></textarea></div><div class="field"><label for="r3">What are the main problems you identify or experience when teaching literacy in your context?</label><textarea id="r3" data-key="r3"></textarea></div></div>
+  <h3>How confident are you in your own literacy skills in the four fundamental language skills areas (listening, speaking, reading and writing)?</h3>
+  <div class="item"><p class="q">Listening</p><div class="yn " role="group" aria-label="My confidence in my own listening skills" data-key="rs_L" data-label="My confidence in my own listening skills" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Speaking</p><div class="yn " role="group" aria-label="My confidence in my own speaking skills" data-key="rs_S" data-label="My confidence in my own speaking skills" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Reading</p><div class="yn " role="group" aria-label="My confidence in my own reading skills" data-key="rs_R" data-label="My confidence in my own reading skills" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Writing</p><div class="yn " role="group" aria-label="My confidence in my own writing skills" data-key="rs_W" data-label="My confidence in my own writing skills" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div>
+  <h3>How confident are you in AI&rsquo;s ability to support learning in these four language skills areas?</h3>
+  <div class="item"><p class="q">Listening</p><div class="yn " role="group" aria-label="My confidence in AI to support learning in listening" data-key="ra_L" data-label="My confidence in AI to support learning in listening" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Speaking</p><div class="yn " role="group" aria-label="My confidence in AI to support learning in speaking" data-key="ra_S" data-label="My confidence in AI to support learning in speaking" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Reading</p><div class="yn " role="group" aria-label="My confidence in AI to support learning in reading" data-key="ra_R" data-label="My confidence in AI to support learning in reading" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div><div class="item"><p class="q">Writing</p><div class="yn " role="group" aria-label="My confidence in AI to support learning in writing" data-key="ra_W" data-label="My confidence in AI to support learning in writing" data-opts="1 (not at all confident)|2|3|4|5 (very confident)"></div></div>
+  
+</section>
+<section class="block" id="concept-1">
+  <h2>Concept 1: Generative AI and oral language</h2>
+  <h3 class="auto-title">Try a prompt on your own speaking and listening activity</h3><div class="auto">
+  <div class="qs"><div class="field"><label for="c1a">What are the strengths of your students in the oral language domains of literacy (listening and speaking)? What challenges do they experience?</label><textarea id="c1a" data-key="c1a"></textarea></div><div class="field"><label for="c1b">Reflect on one recent speaking and listening activity in your teaching, and how you would like to improve it. Write a short summary (1-2 sentences) of the activity.</label><textarea id="c1b" data-key="c1b"></textarea></div></div>
+  <p>Prior to the live session, use an approved AI agent to input the following prompt:</p>
+  <div class="ph" role="note"><strong>Placeholder - Approved AI tool link (to be confirmed)</strong></div>
+  <div class="pbuild"><code id="p1text">&ldquo;Suggest an improvement for the following speaking and listening activity: &lt;insert your summary here&gt;.&rdquo;</code><button type="button" class="btn" id="p1copy" style="margin-top:.6rem">Copy this prompt with my summary</button><span class="status" id="p1status" aria-live="polite"></span></div>
+  <div class="callout"><p>Do not put student names or other identifying details into an AI tool.</p></div>
+  <div class="qs"><div class="field"><label for="c1c">Reflection: does the AI response provide you with meaningful improvements?</label><textarea id="c1c" data-key="c1c"></textarea></div></div></div>
+  
+</section>
+<section class="block" id="concept-2">
+  <h2>Concept 2: Generative AI and reading</h2>
+  <h3 class="auto-title">Trial a prompt for a reading text</h3><div class="auto">
+  <p>Select a short reading text you would use with your students. Identify one reading focus area you would like students to improve, and trial a prompt that might help AI develop a teaching activity to use with the text.</p>
+  <div class="promptcard"><p class="lab">For example</p><p>If you would like students to develop their vocabulary skills, enter the following prompt: &ldquo;Design a teaching activity to help students identify key vocabulary in this text.&rdquo;</p></div>
+  <div class="qs"><div class="field"><label for="c2a">The short reading text I selected (title or description)...</label><textarea id="c2a" data-key="c2a"></textarea></div><div class="field"><label for="c2b">The reading focus area I would like students to improve...</label><textarea id="c2b" data-key="c2b"></textarea></div><div class="field"><label for="c2c">The prompt I trialled...</label><textarea id="c2c" data-key="c2c"></textarea></div><div class="field"><label for="c2d">Reflection: do you feel this is an appropriate activity for your students?</label><textarea id="c2d" data-key="c2d"></textarea></div></div></div>
+</section>
+<section class="block" id="concept-3">
+  <h2>Concept 3: Generative AI and writing</h2>
+  <h3 class="auto-title">Ask for a model response</h3><div class="auto">
+  <p>Identify a writing task you would ask your students to complete. Ask an approved AI agent to create a model response for this task.</p>
+  <div class="promptcard"><p class="lab">An example prompt might be</p><p>&ldquo;Students are asked to write a short description of a garden. Write a model response using descriptive language at an appropriate level for a 10 year old Indonesian student.&rdquo;</p></div>
+  <div class="qs"><div class="field"><label for="c3a">The writing task I identified...</label><textarea id="c3a" data-key="c3a"></textarea></div><div class="field"><label for="c3b">Reflect on the model response provided. Would this be an appropriate response from your students?</label><textarea id="c3b" data-key="c3b"></textarea></div><div class="field"><label for="c3c">What changes might you need to make to it?</label><textarea id="c3c" data-key="c3c"></textarea></div></div></div>
+</section>
+<section class="block" id="before-live">
+  <h2>Before the live session</h2>
+  <p>Select literacy resources or activities that you have used in your teaching, for use during the live session. This might be a text you use with students, or an activity you ask students to complete. These should include:</p>
+  <ul><li>One example that focuses on listening and/or speaking</li><li>One example that focuses on reading</li><li>One example that focuses on writing</li></ul>
+  <p>Please also bring along your prompts and the AI responses to the live session.</p>
+  <div class="item"><p class="q">Tick each one when it is ready.</p><div class="yn " role="group" aria-label="Ready for the live session" data-key="ready" data-label="Ready for the live session" data-opts="Listening and/or speaking example|Reading example|Writing example|My prompts and the AI responses" data-multi="1"></div></div>
+</section>
+<section class="block" id="express">
+  <h2>Look back at your reflections</h2>
+  <div class="qs"><div class="field"><label for="e1">How has your confidence and thinking changed or progressed?</label><textarea id="e1" data-key="e1"></textarea></div></div>
+  <div class="item"><p class="q">Identify an area of literacy that you would like to develop your AI skills in further to support student learning.</p><div class="yn " role="group" aria-label="Area of literacy I would like to develop my AI skills in" data-key="e2" data-label="Area of literacy I would like to develop my AI skills in" data-opts="Listening|Speaking|Reading|Writing"></div></div>
+  <div class="ph" role="note"><strong>Placeholder - Padlet or approved shared space: post your reflection here</strong></div>
+  <div class="tools"><button type="button" class="btn" data-export>Download my responses</button><span class="status">Everything you enter on this page is saved on this device only. This file includes all of it.</span></div>
+</section>
+<section class="block" id="after"><h2>After the live session: archive and revision layer</h2><p>Return to this page after the live session. The recording and slides will be added here, and this is where you come back while you write your assessment.</p><div class="ph" role="note"><strong>Placeholder - Echo360 or approved recording link: live session recording</strong></div><div class="ph" role="note"><strong>Placeholder - PDF of live-session slides</strong></div></section>
+
+
+</main></div>
+<script>
+(function(){
+  var P='lit:';
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  document.querySelectorAll('textarea[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.yn').forEach(function(g){
+    var key=g.dataset.key,multi=!!g.dataset.multi,cur=get(key),sel=[];
+    if(multi){try{sel=JSON.parse(cur||'[]')}catch(e){}}
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;
+      b.setAttribute('aria-pressed',String(multi?sel.indexOf(o)>-1:cur===o));
+      b.addEventListener('click',function(){
+        if(multi){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));var l=[];g.querySelectorAll('button').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')l.push(x.textContent)});set(key,JSON.stringify(l))}
+        else{var was=b.getAttribute('aria-pressed')==='true';g.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});if(was){set(key,'')}else{b.setAttribute('aria-pressed','true');set(key,o)}}
+        g.dispatchEvent(new CustomEvent('chosen'));});
+      g.appendChild(b)});
+  });
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  var NONE='(no response)';
+  function collect(){
+    var o=['AI-Supported Literacy Teaching: using generative AI to support listening, speaking, reading and writing','My responses (online preparation)',''];
+    document.querySelectorAll('main section.block').forEach(function(sec){
+      if(sec.id==='references')return;
+      o.push(norm(sec.querySelector('h2').textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){var ans;if(el.tagName==='TEXTAREA')ans=el.value.trim();else if(el.classList.contains('yn')){ans=get(el.dataset.key);if(el.dataset.multi){try{ans=JSON.parse(ans||'[]').join(', ')}catch(e){ans=''}}}else return;o.push(labelFor(el),'  '+(ans||NONE))});
+      o.push('');
+    });
+    return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-literacy.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.35,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+<script>(function(){var P='lit:';function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+
+var c=document.getElementById('c1b'),pt=document.getElementById('p1text'),btn=document.getElementById('p1copy'),st=document.getElementById('p1status');
+function build(){var s=c.value.trim();return '\u201CSuggest an improvement for the following speaking and listening activity: '+(s||'<insert your summary here>')+'.\u201D'}
+function upd(){pt.textContent=build()}c.addEventListener('input',upd);upd();
+btn.addEventListener('click',function(){var t=build().replace(/^\u201C|\u201D$/g,'');var done=function(){st.textContent=' Copied.'};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){st.textContent=' Select the text above and copy it.'})}else{st.textContent=' Select the text above and copy it.'}});
+})();</script>
+</body>
+</html>

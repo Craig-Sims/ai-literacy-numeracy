@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enhancing Literacy and Numeracy Skills Using AI</title>
+<style>
+:root{
+  --violet-900:#241046;
+  --violet:#3E1F7F;
+  --violet-300:#C5BCD9;
+  --violet-100:#DDD7EA;
+  --violet-50:#ECE9F2;
+  --paper:#FBFAFD;
+  --ink:#1d1830;
+  --muted:#585270;
+  --marker:#FFD54A;
+  --marker-soft:#FFF6D1;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--marker);outline-offset:4px;border-radius:8px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--violet);padding:.65rem 1rem;z-index:100}
+.skip:focus{left:.5rem;top:.5rem}
+
+.hero{background:var(--violet);color:#fff;overflow:hidden}
+.hero-inner{max-width:78rem;margin:0 auto;padding:5rem 1.5rem;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:3rem;align-items:center;min-height:29rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.45rem,5vw,4rem);line-height:1.06;margin:0 0 1.35rem;letter-spacing:-.015em;text-wrap:balance}
+.hero p{margin:0;color:var(--violet-300);font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.5;font-weight:600;max-width:39rem;text-wrap:balance}
+.hero svg{width:100%;height:auto;max-width:26rem;justify-self:center;display:block}
+.stroke-a{stroke-dasharray:220;animation:draw 1.1s .25s ease-out both}
+.stroke-b{stroke-dasharray:160;animation:draw .9s .8s ease-out both}
+.dot{transform-origin:center;animation:pop .35s both}
+.dot.d1{animation-delay:.35s}.dot.d2{animation-delay:.55s}.dot.d3{animation-delay:.75s}.dot.d4{animation-delay:.95s}.dot.d5{animation-delay:1.15s}
+@keyframes draw{from{stroke-dashoffset:220}to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+main{max-width:72rem;margin:0 auto;padding:4.25rem 1.5rem 6rem}
+.intro{max-width:48rem;margin:0 0 3.25rem}
+.intro h2,.modules h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.75rem,3vw,2.35rem);line-height:1.2;margin:0 0 1.2rem;color:var(--violet-900)}
+.intro h2::after,.modules h2::after{content:"";display:block;width:3.5rem;height:4px;background:var(--marker);margin-top:.85rem;border-radius:2px}
+.intro p{margin:0 0 1rem;color:var(--ink);max-width:44rem}
+.callout{background:var(--violet-50);border-left:5px solid var(--violet);border-radius:0 10px 10px 0;padding:1.2rem 1.45rem;margin-top:1.65rem;max-width:46rem}
+.callout p{margin:0}
+
+.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.75rem}
+.module-card{display:flex;align-items:center;gap:1rem;min-height:7.25rem;padding:1.2rem 1.25rem;background:#fff;border:2px solid var(--violet-100);border-radius:14px;text-decoration:none;box-shadow:0 4px 14px rgba(36,16,70,.035);transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+.module-card:hover{border-color:var(--violet);transform:translateY(-2px);box-shadow:0 8px 20px rgba(36,16,70,.08)}
+.module-card .num{flex:0 0 3rem;width:3rem;height:3rem;border-radius:50%;display:grid;place-items:center;background:var(--marker-soft);border:2px solid var(--marker);font-weight:800;color:var(--violet-900)}
+.module-card .copy{min-width:0}
+.module-card strong{display:block;color:var(--violet-900);font-size:1.08rem;line-height:1.3;margin-bottom:.2rem}
+.module-card span{display:block;color:var(--muted);font-size:.94rem;line-height:1.4}
+.module-card.placeholder{cursor:default}
+.module-card.placeholder:hover{border-color:var(--violet-100);transform:none;box-shadow:0 4px 14px rgba(36,16,70,.035)}
+.module-card:first-child{border-color:var(--violet)}
+.module-card:first-child .num{background:var(--marker)}
+
+.footer{border-top:2px solid var(--violet-100);padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.92rem}
+.footer-inner{max-width:72rem;margin:0 auto}
+
+/* bilingual */
+.id{font-style:italic}
+.hero .h1id{font-family:var(--serif);font-weight:600;font-size:clamp(1.3rem,2.4vw,1.85rem);line-height:1.25;color:var(--violet-300);margin:0 0 1.1rem;max-width:39rem;font-style:italic}
+.hero .pid{font-weight:400;font-style:italic;margin-top:.7rem;font-size:clamp(1rem,1.6vw,1.15rem)}
+.intro h2 .sub,.modules h2 .sub{display:block;font-family:var(--sans);font-size:1rem;font-weight:500;font-style:italic;color:var(--muted);margin-top:.25rem}
+.intro p.id{color:var(--muted);border-left:3px solid var(--violet-100);padding-left:.9rem;margin-top:-.35rem}
+.intro .callout p.id{border-left:0;padding-left:0;margin-top:.35rem;color:var(--muted)}
+.module-card .id{color:var(--muted);font-size:.88rem;margin-top:.35rem;line-height:1.35}
+.module-card .id b{display:block;color:var(--violet-900);font-weight:700;font-style:italic}
+.footer-inner .id{display:block;margin-top:.35rem}
+@media(max-width:56rem){
+  .hero-inner{grid-template-columns:1fr;padding:3.7rem 1.5rem;min-height:0}
+  .hero svg{max-width:18rem;justify-self:start}
+}
+@media(max-width:42rem){
+  .module-grid{grid-template-columns:1fr}
+  main{padding-top:3rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .stroke-a,.stroke-b,.dot{animation:none}
+  .module-card{transition:none}
+}
+
+.intro.wide{max-width:60rem}
+ol.lo{margin:.4rem 0 0;padding-left:1.4rem}
+ol.lo li{margin:0 0 .8rem;color:var(--ink)}
+ol.lo li .id{display:block;font-style:italic;color:var(--muted);font-size:.95rem;margin-top:.15rem;border-left:0;padding-left:0}
+.module-card{align-items:flex-start;cursor:default}
+.module-card:hover{transform:none;border-color:var(--violet-100);box-shadow:0 4px 14px rgba(36,16,70,.035)}
+.module-card .copy{flex:1}
+.module-card .copy strong a{color:var(--violet-900);text-decoration-thickness:2px;text-underline-offset:3px}
+.module-card .copy strong a:hover{color:var(--violet)}
+.links{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0 .2rem}
+.links a{display:inline-block;background:var(--violet);color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;padding:.4rem .95rem;border-radius:999px}
+.links a:hover{background:var(--violet-900)}
+details.los{margin-top:.7rem;border-top:1px solid var(--violet-100);padding-top:.6rem}
+details.los summary{cursor:pointer;font-weight:700;color:var(--violet-900);font-size:.98rem}
+details.los summary span{font-weight:500;font-style:italic;color:var(--muted)}
+details.los h4{margin:.9rem 0 .2rem;color:var(--violet);font-size:.95rem}
+.module-card details.los span.id,.module-card ol.lo span{display:block}
+.assess{background:var(--violet-50);border-left:5px solid var(--violet);border-radius:0 12px 12px 0;padding:1.3rem 1.5rem;margin:1.2rem 0 1.4rem;max-width:56rem}
+.assess p{margin:0 0 .7rem;max-width:none}
+table.feed{border-collapse:separate;border-spacing:0;width:100%;max-width:60rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px;overflow:hidden;font-size:.98rem}
+table.feed th{background:var(--violet);color:#fff;text-align:left;padding:.6rem .9rem}
+table.feed td{padding:.65rem .9rem;vertical-align:top;border-top:1px solid var(--violet-100)}
+table.feed td .id{display:block;font-style:italic;color:var(--muted);font-size:.9rem;margin-top:.15rem}
+table.feed td:first-child{font-weight:700;color:var(--violet-900);white-space:nowrap}
+.tw{overflow-x:auto}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content / <span lang="id">Lewati ke konten</span></a>
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Enhancing Literacy and Numeracy Skills Using AI</h1>
+      <p class="h1id" lang="id">Meningkatkan Keterampilan Literasi dan Numerasi Menggunakan Kecerdasan Artifisial</p>
+      <p>A professional learning programme for PPG instructors, mentor teachers and teacher educators.</p>
+      <p class="pid" lang="id">Program pembelajaran profesional bagi instruktur PPG, guru pamong, dan pendidik guru.</p>
+    </div>
+    <svg viewBox="0 0 420 360" role="img" aria-label="Seven connected learning modules arranged as a pathway">
+      <path class="stroke-a" d="M54 272 C112 222 120 145 187 140 C262 134 266 64 357 63" fill="none" stroke="#C5BCD9" stroke-width="12" stroke-linecap="round"/>
+      <path class="stroke-b" d="M70 292 C145 272 204 265 253 220 C303 174 327 132 366 100" fill="none" stroke="#FFD54A" stroke-width="7" stroke-linecap="round" opacity=".95"/>
+      <circle class="dot d1" cx="67" cy="279" r="20" fill="#fff"/><circle class="dot d2" cx="123" cy="220" r="20" fill="#fff"/><circle class="dot d3" cx="177" cy="157" r="20" fill="#fff"/><circle class="dot d4" cx="238" cy="137" r="20" fill="#fff"/><circle class="dot d5" cx="298" cy="93" r="20" fill="#fff"/>
+      <circle cx="349" cy="65" r="23" fill="#FFD54A"/><circle cx="367" cy="117" r="17" fill="#fff" opacity=".9"/>
+      <g fill="#3E1F7F" font-family="Arial, sans-serif" font-weight="700" font-size="15" text-anchor="middle">
+        <text x="67" y="284">1</text><text x="123" y="225">2</text><text x="177" y="162">3</text><text x="238" y="142">4</text><text x="298" y="98">5</text><text x="349" y="70">6</text><text x="367" y="122">7</text>
+      </g>
+    </svg>
+  </div>
+</header>
+<main id="main">
+  <section class="intro" aria-labelledby="about-programme">
+    <h2 id="about-programme">About the programme<span class="sub" lang="id">Tentang program</span></h2>
+    <p>This programme explores how artificial intelligence can support literacy and numeracy teaching while keeping professional judgement, learner needs and educational purpose at the centre of practice.</p>
+    <p class="id" lang="id">Program ini mengkaji bagaimana kecerdasan artifisial dapat mendukung pembelajaran literasi dan numerasi dengan tetap menempatkan pertimbangan profesional, kebutuhan peserta didik, dan tujuan pendidikan sebagai pusat praktik.</p>
+    <p>Each module has about 90 minutes of self-paced online preparation and a 3-hour live facilitated session. Across the programme, participants will test ideas, examine AI-generated material, apply the learning to their own context and gradually develop an approach they can use in PPG teaching and mentoring.</p>
+    <p class="id" lang="id">Setiap modul terdiri dari sekitar 90 menit persiapan daring mandiri dan sesi langsung yang difasilitasi selama 3 jam. Selama program, peserta akan menguji gagasan, menelaah materi yang dihasilkan AI, menerapkan pembelajaran pada konteks mereka sendiri, dan secara bertahap mengembangkan pendekatan yang dapat digunakan dalam pengajaran dan pendampingan PPG.</p>
+    <div class="callout"><p><strong>Start with Module 1.</strong></p><p class="id" lang="id"><strong>Mulailah dari Modul 1.</strong></p></div>
+  </section>
+
+  <section class="intro wide" aria-labelledby="programme-outcomes">
+    <h2 id="programme-outcomes">What you will be able to do by the end of the programme<span class="sub" lang="id">Apa yang akan dapat Anda lakukan pada akhir program</span></h2>
+    <ol class="lo"><li>Explain how generative AI and algorithmic systems work, what they are optimised for, and where their limits lie.<span class="id" lang="id">Menjelaskan cara kerja KA generatif dan sistem algoritmik, untuk apa sistem tersebut dioptimalkan, dan di mana batasannya.</span></li><li>Use AI as a scaffold to plan literacy and numeracy teaching, writing and refining prompts and judging the quality of what AI produces.<span class="id" lang="id">Menggunakan KA sebagai perancah untuk merencanakan pembelajaran literasi dan numerasi, menulis dan menyempurnakan perintah (prompt), serta menilai kualitas hasil yang dihasilkan KA.</span></li><li>Design AI-aware assessment and inclusive teaching decisions that keep professional judgement with the teacher.<span class="id" lang="id">Merancang asesmen yang peka terhadap KA dan keputusan pembelajaran yang inklusif dengan tetap menempatkan pertimbangan profesional pada guru.</span></li><li>Use AI ethically, safely and equitably, protecting learners’ privacy and the interests of every learner.<span class="id" lang="id">Menggunakan KA secara etis, aman, dan adil, dengan melindungi privasi peserta didik dan kepentingan setiap peserta didik.</span></li><li>Plan and present a sequence of lesson plans that bring AI-supported literacy and numeracy into your own PPG teaching and mentoring, with a reflective ethics rationale.<span class="id" lang="id">Merencanakan dan mempresentasikan rangkaian rencana pembelajaran yang membawa literasi dan numerasi berbantuan KA ke dalam pengajaran dan pendampingan PPG Anda, disertai rasional etika yang reflektif.</span></li></ol>
+  </section>
+
+  <section class="modules" aria-labelledby="programme-modules">
+    <h2 id="programme-modules">Programme modules<span class="sub" lang="id">Modul program</span></h2>
+    <div class="module-grid"><article class="module-card" id="module-1"><span class="num" aria-hidden="true">1</span><div class="copy"><strong>Introduction to AI in Education</strong><span>Professional Judgement and Purposeful Use</span><span class="id" lang="id"><b>Pengantar Kecerdasan Artifisial dalam Pendidikan</b>Pertimbangan Profesional dan Penggunaan yang Bertujuan</span><div class="links"><a href="ai-introduction.html">Online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><ol class="lo"><li>Explain what generative AI is and what it is not.<span class="id" lang="id">Menjelaskan apa itu KA generatif dan apa yang bukan KA generatif.</span></li><li>Write and refine prompts that express your professional intent.<span class="id" lang="id">Menulis dan menyempurnakan perintah (prompt) yang mengungkapkan tujuan profesional Anda.</span></li><li>Judge the educational value of AI output, not only how fluent it is, and describe purposeful and responsible uses in your own teaching and mentoring.<span class="id" lang="id">Menilai nilai edukatif hasil KA, bukan hanya kefasihannya, dan menjelaskan penggunaan yang bertujuan dan bertanggung jawab dalam pengajaran dan pendampingan Anda.</span></li></ol></details></div></article><article class="module-card" id="module-2"><span class="num" aria-hidden="true">2</span><div class="copy"><strong>Algorithmic Literacy and AI-Aware Assessment</strong><span>Seeing, questioning and shaping the systems that shape what we see, know and decide; designing for integrity, visible thinking and feedback</span><span class="id" lang="id"><b>Literasi Algoritmik dan Asesmen yang Peka terhadap KA</b>Melihat, mempertanyakan, dan membentuk sistem yang membentuk apa yang kita lihat, ketahui, dan putuskan</span><div class="links"><a href="ai-algorithmic-literacy-online.html">Algorithmic literacy: online preparation</a><a href="ai-aware-assessment-online.html">AI-aware assessment: online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><h4>Algorithmic literacy</h4><ol class="lo"><li>Explain the three dimensions of algorithmic literacy: cognitive, affective, and behaviour-related<span class="id" lang="id">Menjelaskan tiga dimensi literasi algoritmik: kognitif, afektif, dan terkait perilaku.</span></li><li>Explain how algorithmic systems including AI tools produce their outputs and what they are optimised for, including their capabilities and limitations<span class="id" lang="id">Menjelaskan bagaimana sistem algoritmik, termasuk alat KA, menghasilkan keluarannya dan untuk apa sistem tersebut dioptimalkan, termasuk kemampuan dan keterbatasannya.</span></li><li>Critically evaluate whose interests an algorithmic system serves, and how it might shape what you see, know and decide in your own teaching/ mentoring.<span class="id" lang="id">Mengevaluasi secara kritis kepentingan siapa yang dilayani oleh suatu sistem algoritmik, dan bagaimana sistem itu dapat membentuk apa yang Anda lihat, ketahui, dan putuskan dalam pengajaran/pendampingan Anda.</span></li><li>Apply strategies to shape AI output in your own context, such as prompting a tool to challenge rather than agree.<span class="id" lang="id">Menerapkan strategi untuk membentuk keluaran KA dalam konteks Anda sendiri, misalnya meminta alat KA menantang, bukan menyetujui.</span></li></ol><h4>AI-aware assessment</h4><ol class="lo"><li>Diagnose what an assessment task actually measures and what evidence of learning it makes visible.<span class="id" lang="id">Mendiagnosis apa yang sebenarnya diukur oleh suatu tugas asesmen dan bukti pembelajaran apa yang ditampakkannya.</span></li><li>Decide where AI may and may not sit in an assessment, and state its permitted role explicitly.<span class="id" lang="id">Menentukan di mana KA boleh dan tidak boleh berperan dalam asesmen, dan menyatakan peran yang diizinkan secara eksplisit.</span></li><li>Use AI to support feedback while evaluative judgement stays with the teacher.<span class="id" lang="id">Menggunakan KA untuk mendukung umpan balik sementara penilaian evaluatif tetap berada pada guru.</span></li></ol></details></div></article><article class="module-card" id="module-3"><span class="num" aria-hidden="true">3</span><div class="copy"><strong>AI-Supported Literacy Teaching</strong><span>Using generative AI to support listening, speaking, reading and writing</span><span class="id" lang="id"><b>Pembelajaran Literasi Berbantuan KA</b>Menggunakan KA generatif untuk mendukung menyimak, berbicara, membaca, dan menulis</span><div class="links"><a href="ai-literacy-online.html">Online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><ol class="lo"><li>Identify opportunities and challenges in using AI to support literacy in the four domains (listening, speaking, reading, and writing)<span class="id" lang="id">Mengidentifikasi peluang dan tantangan dalam menggunakan KA untuk mendukung literasi pada empat ranah (menyimak, berbicara, membaca, dan menulis).</span></li><li>Select a literacy learning goal and choose an AI-supported activity<span class="id" lang="id">Memilih tujuan pembelajaran literasi dan memilih kegiatan berbantuan KA.</span></li><li>Write and refine prompts to generate, adapt, and critique literacy learning materials<span class="id" lang="id">Menulis dan menyempurnakan perintah (prompt) untuk menghasilkan, menyesuaikan, dan mengkritisi materi pembelajaran literasi.</span></li><li>Design an inclusive literacy lesson or activity that keeps student thinking and teacher judgement central<span class="id" lang="id">Merancang pelajaran atau kegiatan literasi yang inklusif dan menjaga pemikiran peserta didik serta pertimbangan guru tetap sebagai pusat.</span></li></ol></details></div></article><article class="module-card" id="module-4"><span class="num" aria-hidden="true">4</span><div class="copy"><strong>AI-Supported Numeracy Teaching</strong><span>Using generative AI to generate, evaluate and refine numeracy tasks</span><span class="id" lang="id"><b>Pembelajaran Numerasi Berbantuan KA</b>Menggunakan KA generatif untuk menghasilkan, mengevaluasi, dan menyempurnakan tugas numerasi</span><div class="links"><a href="ai-numeracy-online.html">Online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><ol class="lo"><li>Evaluate AI responses to numeracy questions for accuracy, pedagogy and context.<span class="id" lang="id">Mengevaluasi jawaban KA atas pertanyaan numerasi dari segi ketepatan, pedagogi, dan konteks.</span></li><li>Write and refine prompts that generate numeracy problems suited to a particular class, and judge their quality.<span class="id" lang="id">Menulis dan menyempurnakan perintah (prompt) yang menghasilkan soal numerasi yang sesuai untuk kelas tertentu, serta menilai kualitasnya.</span></li><li>Use AI to produce numeracy resources, stating the intended skills first and judging whether the AI output captures them.<span class="id" lang="id">Menggunakan KA untuk menghasilkan sumber belajar numerasi, dengan terlebih dahulu menyatakan keterampilan yang dituju dan menilai apakah hasil KA menangkapnya.</span></li></ol></details></div></article><article class="module-card" id="module-5"><span class="num" aria-hidden="true">5</span><div class="copy"><strong>Digital Diagnostics for Diverse Learners</strong><span>Using AI and data to understand learner needs and plan support</span><span class="id" lang="id"><b>Diagnostik Digital untuk Peserta Didik yang Beragam</b>Menggunakan KA dan data untuk memahami kebutuhan peserta didik dan merencanakan dukungan</span><div class="links"><a href="digital-diagnostics-online.html">Online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><ol class="lo"><li>Read a learner’s capabilities and barriers before looking at labels.<span class="id" lang="id">Membaca kemampuan dan hambatan peserta didik sebelum melihat label.</span></li><li>Preserve the learning goal and change access, and decide whether a support is AI, assistive technology or good design.<span class="id" lang="id">Mempertahankan tujuan pembelajaran dan mengubah akses, serta memutuskan apakah suatu dukungan berupa KA, teknologi bantu, atau rancangan yang baik.</span></li><li>Use data to inform decisions, not automate them, by separating signal, interpretation, action and review, and protecting learner privacy.<span class="id" lang="id">Menggunakan data untuk menginformasikan keputusan, bukan mengotomatiskannya, dengan memisahkan sinyal, interpretasi, tindakan, dan peninjauan, serta melindungi privasi peserta didik.</span></li></ol></details></div></article><article class="module-card" id="module-6"><span class="num" aria-hidden="true">6</span><div class="copy"><strong>Using AI Wisely</strong><span>The Ethics of AI and the Ethics of Using AI</span><span class="id" lang="id"><b>Menggunakan Kecerdasan Artifisial dengan Bijak</b>Etika Kecerdasan Artifisial dan Etika Menggunakannya</span><div class="links"><a href="using-ai-wisely-online.html">Online preparation</a></div><details class="los"><summary>What you will be able to do <span lang="id">/ Apa yang akan dapat Anda lakukan</span></summary><ol class="lo"><li>Explain how AI is built and where ethical risks enter.<span class="id" lang="id">Menjelaskan bagaimana KA dibangun dan di mana risiko etis masuk.</span></li><li>Run one of your own uses of AI through the Five P Check.<span class="id" lang="id">Menguji salah satu penggunaan KA Anda sendiri dengan Five P Check.</span></li><li>Use guidance, including the AI Assessment Scale, to make responsible, equitable and inclusive decisions about AI use.<span class="id" lang="id">Menggunakan panduan, termasuk Skala Asesmen KA (AI Assessment Scale), untuk membuat keputusan yang bertanggung jawab, adil, dan inklusif tentang penggunaan KA.</span></li></ol></details></div></article></div>
+  </section>
+
+  <section class="intro wide" aria-labelledby="assessment" style="margin-top:3.25rem">
+    <h2 id="assessment">Your assessment<span class="sub" lang="id">Asesmen Anda</span></h2>
+    <div class="assess">
+      <p>Over the programme you will build a sequence of three lesson plans that includes AI-generated literacy and numeracy activities, and a short reflective ethics rationale. You will then present one of the activities, and your ethics rationale, in a class.</p>
+      <p class="id" lang="id">Selama program, Anda akan menyusun rangkaian tiga rencana pembelajaran yang memuat kegiatan literasi dan numerasi yang dihasilkan dengan bantuan KA, serta rasional etika yang singkat dan reflektif. Selanjutnya, Anda akan mempresentasikan salah satu kegiatan tersebut beserta rasional etika Anda di dalam kelas.</p>
+    </div>
+    <p>Each module gives you something to carry into your lesson plans. Each online page stays open after the live session, with the recording and slides, so you can return to it while you write.</p>
+    <p class="id" lang="id">Setiap modul memberi Anda sesuatu untuk dibawa ke dalam rencana pembelajaran Anda. Setiap halaman daring tetap terbuka setelah sesi langsung, beserta rekaman dan slide, sehingga Anda dapat kembali ke sana saat menulis.</p>
+    <div class="tw"><table class="feed"><thead><tr><th>Module <span lang="id">/ Modul</span></th><th>What you bring to your lesson plans <span lang="id">/ Yang Anda bawa ke rencana pembelajaran</span></th></tr></thead><tbody><tr><td>Module 1</td><td>A six-part statement of a purposeful, AI-supported teaching decision.<span class="id" lang="id">Pernyataan enam bagian tentang keputusan pembelajaran berbantuan KA yang bertujuan.</span></td></tr><tr><td>Module 2</td><td>Your strategy for challenging the algorithm, and your AI-aware assessment position.<span class="id" lang="id">Strategi Anda untuk menantang algoritma, dan posisi Anda tentang asesmen yang peka terhadap KA.</span></td></tr><tr><td>Module 3</td><td>Your literacy resources, prompts, AI responses and reflections.<span class="id" lang="id">Sumber belajar literasi, perintah, jawaban KA, dan refleksi Anda.</span></td></tr><tr><td>Module 4</td><td>Your numeracy problem, prompts and reflections.<span class="id" lang="id">Soal numerasi, perintah, dan refleksi Anda.</span></td></tr><tr><td>Module 5</td><td>An inclusive, AI-supported teaching decision.<span class="id" lang="id">Keputusan pembelajaran inklusif berbantuan KA.</span></td></tr><tr><td>Module 6</td><td>Your statement on ethical, equitable and responsible use of AI, which feeds your ethics rationale.<span class="id" lang="id">Pernyataan Anda tentang penggunaan KA yang etis, adil, dan bertanggung jawab, yang menjadi bahan rasional etika Anda.</span></td></tr></tbody></table></div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="footer-inner">Curtin University School of Education &times; Directorate of Teacher Profession Education, Ministry of Primary and Secondary Education, Republic of Indonesia<span class="id" lang="id">Sekolah Pendidikan (School of Education) Curtin University &times; Direktorat Pendidikan Profesi Guru, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</span></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Supported Numeracy Teaching</title>
+<style>
+:root{
+  --violet-900:#241046; --violet:#3E1F7F; --violet-300:#C5BCD9; --violet-100:#DDD7EA; --violet-50:#ECE9F2;
+  --paper:#FBFAFD; --ink:#1d1830; --muted:#585270;
+  --marker:#FFD54A; --marker-soft:#FFF6D1; --marker-ink:#6b5200;
+  --accept:#14866A; --reject:#E04A5F;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--violet);text-underline-offset:.18em}
+a:hover{color:var(--violet-900)}
+main a,main p{overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--violet);padding:.6rem 1rem;z-index:100}
+.skip:focus{left:.5rem;top:.5rem}
+
+#progress{position:fixed;inset:0 0 auto 0;height:4px;background:transparent;z-index:50}
+#progress span{display:block;height:100%;width:0;background:var(--marker)}
+
+/* HERO */
+.hero{background:var(--violet);color:#fff;overflow:hidden}
+.hero-inner{max-width:78rem;margin:0 auto;padding:5rem 1.5rem 5rem;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:3rem;align-items:center;min-height:30rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,4.6vw,3.7rem);line-height:1.08;margin:0 0 1.25rem;letter-spacing:-.01em;text-wrap:balance}
+.hero p{margin:0;color:var(--violet-300);font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.45;font-weight:600;max-width:36rem;text-wrap:balance}
+.hero svg{width:100%;height:auto;max-width:25rem;justify-self:center;display:block}
+.hl{transform-origin:0 50%;animation:swipe .7s .9s cubic-bezier(.3,.7,.2,1) both}
+.strike{transform-origin:0 50%;animation:swipe .5s 1.7s ease-out both}
+.mark{stroke-dasharray:60;animation:draw .5s .4s ease-out both}
+.mark-x{stroke-dasharray:60;animation:draw .5s 1.9s ease-out both}
+@keyframes swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes draw{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+
+/* LAYOUT */
+.layout{max-width:78rem;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:14rem minmax(0,1fr);gap:3.5rem}
+.rail{position:sticky;top:0;align-self:start;padding-top:3.5rem;height:100vh;min-width:0}
+.rail ol{list-style:none;margin:0;padding:0;position:relative}
+.rail ol::before{content:"";position:absolute;left:.52rem;top:.8rem;bottom:.8rem;width:2px;background:var(--violet-100)}
+.rail li{position:relative}
+.rail a{display:block;padding:.55rem 0 .55rem 2rem;text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:600;line-height:1.3}
+.rail a::before{content:"";position:absolute;left:0;top:.85rem;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--paper);border:2px solid var(--violet-100)}
+.rail a:hover{color:var(--violet)}
+.rail li.is-done a::before{background:var(--violet);border-color:var(--violet)}
+.rail li.is-current a{color:var(--violet-900)}
+.rail li.is-current a::before{background:var(--marker);border-color:var(--violet);box-shadow:0 0 0 4px rgba(62,31,127,.14)}
+main{min-width:0;max-width:48rem;padding-bottom:6rem}
+
+section.block{padding-top:4.5rem}
+section.block:first-child{padding-top:3.5rem}
+main h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,3vw,2.2rem);line-height:1.2;margin:0 0 1.5rem;color:var(--violet-900);text-wrap:balance}
+main h2::after{content:"";display:block;width:3.5rem;height:4px;background:var(--marker);margin-top:.9rem;border-radius:2px}
+main h3{font-size:1.2rem;line-height:1.35;margin:2.75rem 0 1rem;color:var(--violet-900)}
+main p{margin:0 0 1.15rem;max-width:40rem}
+main ul{margin:0 0 1.15rem;padding-left:1.25rem;max-width:40rem}
+
+/* CALLOUT / NOTES */
+.callout{background:var(--violet-50);border-left:5px solid var(--violet);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;margin:1.75rem 0}
+.callout p{margin:0;max-width:none}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
+.notes .field{display:flex;flex-direction:column;justify-content:flex-end}
+.field label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.4rem;color:var(--violet-900)}
+textarea{width:100%;min-height:7.5rem;resize:vertical;font:inherit;font-size:1rem;line-height:1.55;padding:.75rem .9rem;border:2px solid var(--violet-100);border-radius:8px;background:#fff;color:var(--ink)}
+textarea:focus{border-color:var(--violet);outline:none;box-shadow:0 0 0 3px rgba(62,31,127,.18)}
+.tools{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:center;margin-top:1rem}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border:2px solid var(--violet);background:var(--violet);color:#fff;border-radius:999px;padding:.5rem 1.2rem;cursor:pointer}
+.btn:hover{background:var(--violet-900);border-color:var(--violet-900)}
+.btn.quiet{background:transparent;color:var(--violet)}
+.btn.quiet:hover{background:var(--violet-50);color:var(--violet-900)}
+.status{font-size:.88rem;color:var(--muted)}
+
+/* SELF CHECK */
+.check{margin:1rem 0 1.5rem;display:grid;gap:1rem}
+fieldset.item{border:0;margin:0;padding:1.1rem 1.25rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px}
+fieldset.item legend{padding:0;float:left;width:100%;font-weight:600;margin-bottom:.8rem;line-height:1.45}
+.scale{clear:both;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.scale button{width:2.7rem;height:2.7rem;border-radius:50%;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);font:inherit;font-weight:700;cursor:pointer}
+.scale button:hover{border-color:var(--violet)}
+.scale button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.ends{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:.5rem;max-width:17rem}
+
+/* AUTONOMY / COMPETENCY */
+.concept-head{display:block}
+.auto{background:var(--marker-soft);border:2px solid var(--marker);border-radius:14px;padding:1.5rem 1.75rem;margin:1rem 0 0}
+.auto p:last-child{margin-bottom:0}
+.auto-title{margin-top:2.75rem}
+.auto ul.todo{list-style:none;padding:0;margin:0}
+.todo li{margin:0 0 .55rem}
+.todo label{display:flex;gap:.75rem;align-items:flex-start;cursor:pointer}
+.todo input{margin-top:.4rem;width:1.15rem;height:1.15rem;accent-color:var(--violet);flex:none}
+.todo input:checked+span{color:var(--muted)}
+.comp{border-left:5px solid var(--violet);padding-left:1.5rem;margin-left:0}
+.comp p{max-width:38rem}
+.cite{font-weight:600}
+
+/* PATTERN CARDS */
+.pattern{list-style:none;padding:0;margin:0 0 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:.9rem;max-width:none}
+.pattern li{background:#fff;border:2px solid var(--violet-100);border-top:6px solid var(--violet);border-radius:10px;padding:1rem 1.1rem;line-height:1.5}
+.pattern strong{font-family:var(--serif);font-size:1.2rem;color:var(--violet-900)}
+
+/* JUDGEMENT */
+.lenses{list-style:none;padding:0;margin:0 0 1.5rem;display:grid;gap:.8rem;max-width:none}
+.lenses li{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem}
+.lenses .q{margin:0 0 .75rem;max-width:none;line-height:1.5}
+.lenses .q strong{color:var(--violet-900)}
+.yn{display:flex;flex-wrap:wrap;gap:.6rem}
+.yn button{font:inherit;font-weight:600;font-size:.95rem;min-height:2.6rem;padding:.4rem 1.3rem;border-radius:999px;border:2px solid var(--violet-300);background:#fff;color:var(--violet-900);cursor:pointer}
+.yn button:hover{border-color:var(--violet)}
+.yn button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(62,31,127,.16)}
+.lenses textarea{min-height:5.5rem}
+
+/* MEDIA */
+figure.info{margin:2rem 0;max-width:none}
+figure.info button{display:block;width:100%;padding:0;border:2px solid var(--violet-100);border-radius:12px;background:#fff;cursor:zoom-in;overflow:hidden}
+figure.info img{display:block;width:100%;height:auto}
+figure.map{max-width:32rem}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:.6rem;max-width:none}
+.audio{background:var(--violet-50);border-radius:12px;padding:1rem 1.25rem;margin:1rem 0 2rem}
+.audio strong{display:block;margin-bottom:.6rem;color:var(--violet-900)}
+.audio audio{width:100%}
+dialog{border:0;padding:0;max-width:min(96vw,1400px);background:transparent}
+dialog::backdrop{background:rgba(20,10,40,.82)}
+dialog img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}
+dialog .btn{position:absolute;top:.75rem;right:.75rem}
+
+.ph{min-height:9.5rem;border:2px dashed var(--violet-300);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;margin:2rem 0;color:var(--violet-900)}
+
+/* STARTERS */
+.starters{display:grid;gap:1rem;margin:1.25rem 0 1.75rem}
+.starters .field label{font-weight:600}
+
+.refs p{font-size:.95rem;color:var(--muted);max-width:42rem;padding-left:1.5rem;text-indent:-1.5rem}
+
+/* RESPONSIVE */
+@media (max-width:60rem){
+  .hero-inner{grid-template-columns:1fr;padding:3.5rem 1.5rem;min-height:0}
+  .hero svg{max-width:17rem;justify-self:start}
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{position:sticky;top:0;z-index:40;height:auto;padding:0;margin:0 -1.5rem;background:var(--paper);border-bottom:2px solid var(--violet-100)}
+  .rail ol{display:flex;overflow-x:auto;padding:.25rem 1.5rem}
+  .rail ol::before{display:none}
+  .rail a{padding:.7rem .9rem;white-space:nowrap}
+  .rail a::before{display:none}
+  .rail li.is-current a{box-shadow:inset 0 -4px 0 var(--marker)}
+  .rail li.is-done a{color:var(--violet)}
+  section.block:first-child{padding-top:2.5rem}
+}
+@media (max-width:40rem){
+  main{max-width:100%}
+  .notes,.pattern{grid-template-columns:1fr}
+  .auto{padding:1.25rem}
+  .comp{padding-left:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hl,.strike,.mark,.mark-x{animation:none}
+}
+@media print{
+  #progress,.rail,.tools,.hero svg{display:none}
+  .layout{display:block}
+  body{background:#fff}
+  .hero{background:#fff;color:#000}
+  .hero p{color:#333}
+}
+
+.yn button{font-size:.9rem;padding:.35rem .8rem}
+.item{background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:1rem 1.25rem;margin:0 0 .9rem}
+.item p{max-width:none}.item .q{margin:0 0 .6rem;font-weight:600}
+.qs{display:grid;gap:1rem;margin:1rem 0}
+.qs .field label{font-weight:600;font-size:1rem;color:var(--violet-900)}
+.promptcard{background:#fff;border-left:5px solid var(--marker);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1rem 0;box-shadow:0 2px 8px rgba(36,16,70,.06)}
+.promptcard p{margin:0;max-width:none}.promptcard .lab{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.draft{background:#FFF1D6;border:2px dashed #d98a00;border-radius:10px;padding:.8rem 1.1rem;margin:1rem 0;font-size:.95rem}
+.draft strong{color:#8a5500}
+.draft p{margin:0;max-width:none}
+.rate{display:grid;grid-template-columns:1fr;gap:.35rem;background:#fff;border:2px solid var(--violet-100);border-radius:12px;padding:.8rem 1rem;margin:0 0 .7rem}
+.rate h4{margin:0 0 .3rem;font-size:1rem;color:var(--violet-900)}
+.rate .row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.rate .row span{min-width:11rem;font-size:.92rem;color:var(--muted)}
+details.reveal{margin:.6rem 0 1rem}details.reveal summary{cursor:pointer;font-weight:600;color:var(--violet)}
+details.reveal p{margin:.5rem 0 0}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress" aria-hidden="true"><span></span></div>
+
+<header class="hero"><div class="hero-inner"><div>
+  <h1>AI-Supported Numeracy Teaching</h1>
+  <p>Using generative AI to generate, evaluate and refine numeracy tasks</p>
+  <p style="margin-top:.75rem;font-weight:400;font-size:1rem">Enhancing Literacy and Numeracy Skills Using AI. Online preparation, about 90 minutes.</p>
+</div><svg viewBox="0 0 380 460" role="img" aria-label="A page of draft text marked up by a teacher: one line ticked, one highlighted, one crossed out">
+      <rect x="20" y="20" width="340" height="420" rx="14" fill="#fff"/>
+      <g fill="#D9D3E8">
+        <rect x="70" y="58" width="250" height="12" rx="6"/>
+        <rect x="70" y="94" width="270" height="12" rx="6" fill="#C9C0DF" transform="translate(0,0)"/>
+        <rect x="70" y="130" width="200" height="12" rx="6"/>
+        <rect x="70" y="166" width="270" height="12" rx="6"/>
+        <rect x="70" y="202" width="240" height="12" rx="6"/>
+        <rect x="70" y="238" width="270" height="12" rx="6"/>
+        <rect x="70" y="274" width="170" height="12" rx="6"/>
+        <rect x="70" y="310" width="260" height="12" rx="6"/>
+        <rect x="70" y="346" width="226" height="12" rx="6"/>
+        <rect x="70" y="382" width="140" height="12" rx="6"/>
+      </g>
+      <rect class="hl" x="62" y="86" width="286" height="28" rx="4" fill="#FFD54A" opacity=".85"/>
+      <rect x="70" y="94" width="270" height="12" rx="6" fill="#8d7fb0" opacity=".55"/>
+      <path class="mark" d="M34 66 l9 10 l17 -22" fill="none" stroke="#14866A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="mark-x" d="M36 128 l16 16 M52 128 l-16 16" fill="none" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+      <line class="strike" x1="62" y1="136.5" x2="282" y2="136.5" stroke="#E04A5F" stroke-width="5" stroke-linecap="round"/>
+    </svg></div></header>
+<div class="layout">
+<nav class="rail" aria-label="Sections"><ol>
+ <li><a href="#ground">Ground</a></li><li><a href="#readiness">Readiness</a></li><li><a href="#concept-1">Concept 1</a></li><li><a href="#concept-2">Concept 2</a></li><li><a href="#concept-3">Concept 3</a></li><li><a href="#express">Express</a></li><li><a href="#after">After the live session</a></li><li><a href="#references">References</a></li>
+</ol></nav>
+<main id="main">
+
+
+
+<section class="block" id="ground">
+  <h2>Numeracy is not simply calculation</h2>
+  <div class="callout"><p><strong>How to read this module.</strong> Participants are designing and evaluating numeracy activities that their PPG students could use, analyse or adapt for school learners. School-class examples are therefore teacher-education material.</p></div>
+  
+  <p>How is numeracy currently understood in Indonesia, and what does this mean for the kinds of tasks we ask AI to generate?</p>
+  <div class="ph" role="note"><strong>Placeholder - Short Ground reading or video: numeracy in Indonesia (source to be confirmed, starting with the national numeracy movement, Gerakan Numerasi Nasional)</strong></div>
+  
+  <div class="qs"><div class="field"><label for="g1">In my own words, numeracy in my context means...</label><textarea id="g1" data-key="g1"></textarea></div></div>
+</section>
+
+<section class="block" id="readiness">
+  <h2>Where am I starting from?</h2>
+  <p>Before you work with AI, start with your own work.</p>
+  <div class="qs"><div class="field"><label for="r1">How does numeracy appear within the Indonesian curriculum and education system?</label><textarea id="r1" data-key="r1"></textarea></div><div class="field"><label for="r2">How would you approach solving a numeracy problem yourself?</label><textarea id="r2" data-key="r2"></textarea></div><div class="field"><label for="r3">Which pedagogies do you typically employ when teaching numeracy?</label><textarea id="r3" data-key="r3"></textarea></div></div>
+  <h3>Rate your confidence, and your confidence in AI</h3>
+  <p>For each element of teaching numeracy, rate your own confidence and your confidence in AI, from 1 (not at all confident) to 5 (very confident).</p>
+  
+  <div class="rate"><h4>Personal numeracy capability</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Personal numeracy capability: my confidence (1 to 5)" data-key="rs0" data-label="Personal numeracy capability: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Personal numeracy capability: my confidence in AI (1 to 5)" data-key="ra0" data-label="Personal numeracy capability: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Identifying numeracy opportunities within my phase of education or learning area</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Identifying numeracy opportunities within my phase of education or learning area: my confidence (1 to 5)" data-key="rs1" data-label="Identifying numeracy opportunities within my phase of education or learning area: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Identifying numeracy opportunities within my phase of education or learning area: my confidence in AI (1 to 5)" data-key="ra1" data-label="Identifying numeracy opportunities within my phase of education or learning area: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Developing resources</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Developing resources: my confidence (1 to 5)" data-key="rs2" data-label="Developing resources: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Developing resources: my confidence in AI (1 to 5)" data-key="ra2" data-label="Developing resources: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Providing appropriate differentiation and scaffolding</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Providing appropriate differentiation and scaffolding: my confidence (1 to 5)" data-key="rs3" data-label="Providing appropriate differentiation and scaffolding: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Providing appropriate differentiation and scaffolding: my confidence in AI (1 to 5)" data-key="ra3" data-label="Providing appropriate differentiation and scaffolding: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Assessing numeracy</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Assessing numeracy: my confidence (1 to 5)" data-key="rs4" data-label="Assessing numeracy: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Assessing numeracy: my confidence in AI (1 to 5)" data-key="ra4" data-label="Assessing numeracy: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Explaining ideas and choosing representations</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Explaining ideas and choosing representations: my confidence (1 to 5)" data-key="rs5" data-label="Explaining ideas and choosing representations: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Explaining ideas and choosing representations: my confidence in AI (1 to 5)" data-key="ra5" data-label="Explaining ideas and choosing representations: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div><div class="rate"><h4>Giving feedback to learners</h4><div class="row"><span>My confidence</span><div class="yn" role="group" aria-label="Giving feedback to learners: my confidence (1 to 5)" data-key="rs6" data-label="Giving feedback to learners: my confidence (1 to 5)" data-opts="1|2|3|4|5"></div></div><div class="row"><span>My confidence in AI</span><div class="yn" role="group" aria-label="Giving feedback to learners: my confidence in AI (1 to 5)" data-key="ra6" data-label="Giving feedback to learners: my confidence in AI (1 to 5)" data-opts="1|2|3|4|5"></div></div></div>
+  <div class="callout"><p><strong>Reflect.</strong> Compare your ratings for yourself with your ratings for AI. Justify your comparative ratings.</p>
+  <div class="qs"><div class="field"><label for="r4">My comparative ratings, and why...</label><textarea id="r4" data-key="r4"></textarea></div></div></div>
+</section>
+
+<section class="block" id="concept-1">
+  <h2>Concept 1: Generative AI and numeracy</h2>
+  <h3 class="auto-title">Try three prompts and reflect</h3>
+  <div class="auto">
+    <p>Use an approved AI tool of your choice. Enter each prompt, then reflect on the output.</p>
+    <div class="ph" role="note"><strong>Placeholder - Approved AI tool link or list (to be confirmed)</strong></div>
+    
+    <div class="promptcard"><p class="lab">Prompt 1</p><p>"What is 48271 x 9386?"</p></div>
+    <p>Use a calculator to check the answer.</p>
+    <details class="reveal"><summary>Check your calculator result against the answer</summary><p>48271 x 9386 = 453,071,606.</p></details>
+    <div class="item"><p class="q">Was the AI response correct?</p><div class="yn" role="group" aria-label="Prompt 1: was the AI response correct" data-key="c1p1" data-label="Prompt 1: was the AI response correct" data-opts="Correct|Incorrect|Partly correct"></div></div>
+    <div class="promptcard"><p class="lab">Prompt 2</p><p>"Two shops offer rice at 5 kg for Rp72,000 and 8 kg for Rp112,000. Which is the better buy? Explain in a way suitable for a Kelas 6 learner."</p></div>
+    <details class="reveal"><summary>Work it out yourself first, then check</summary><p>5 kg at Rp72,000 is Rp14,400 per kg. 8 kg at Rp112,000 is Rp14,000 per kg. The 8 kg bag is the better buy, by Rp400 per kg.</p></details>
+    
+    <div class="qs"><div class="field"><label for="c1p2">Is this the reasoning you would encourage students to use? What representation did the AI choose?</label><textarea id="c1p2" data-key="c1p2"></textarea></div></div>
+    <div class="promptcard"><p class="lab">Prompt 3</p><p>"Suggest a meaningful numeracy problem for a Kelas 3 child in Indonesia."</p></div>
+    
+    <div class="qs"><div class="field"><label for="c1p3a">Do you feel this is an appropriate and meaningful problem for most students in your local context?</label><textarea id="c1p3a" data-key="c1p3a"></textarea></div><div class="field"><label for="c1p3b">In what ways might this problem not be appropriate or meaningful to students?</label><textarea id="c1p3b" data-key="c1p3b"></textarea></div></div>
+    <p><strong>Review all three outputs.</strong> Where did the AI struggle?</p>
+    <div class="qs"><div class="field"><label for="c1a">With accuracy...</label><textarea id="c1a" data-key="c1a"></textarea></div><div class="field"><label for="c1b">With pedagogy...</label><textarea id="c1b" data-key="c1b"></textarea></div><div class="field"><label for="c1c">With context...</label><textarea id="c1c" data-key="c1c"></textarea></div></div>
+  </div>
+  <h3>How AI handles numeracy questions</h3>
+  <div class="comp"><p>Common AI agents generate responses to numeracy questions in ways that can be fluent and still wrong, thin on pedagogy, or out of context. This is changing quickly.</p></div>
+  <div class="ph" role="note"><strong>Placeholder - Pre-session reading or short explainer: how common AI agents handle numeracy questions, their limitations, and how this is evolving (Blake to supply; mathematics-specific sources suggested)</strong></div>
+</section>
+
+<section class="block" id="concept-2">
+  <h2>Concept 2: Using generative AI for ideation</h2>
+  <h3 class="auto-title">Draft a prompt, generate one problem, evaluate it</h3>
+  <div class="auto">
+    <p>Review Module 1 and your earlier responses. Draft a prompt that gives the AI:</p>
+    <ul><li>an overview of a typical class context for your PPG students;</li><li>what you consider constitutes an effective numeracy problem;</li><li>what opportunities there should be for students to engage with the problem (the general approach you want students to take).</li></ul>
+    <p>If you have no preferred approach, you may align to Polya&rsquo;s problem-solving steps: understand the problem, devise a plan, carry out the plan, and look back.</p>
+    <div class="qs"><div class="field"><label for="c2a">The class context...</label><textarea id="c2a" data-key="c2a"></textarea></div><div class="field"><label for="c2b">What I consider an effective numeracy problem...</label><textarea id="c2b" data-key="c2b"></textarea></div><div class="field"><label for="c2c">The approach I want students to take...</label><textarea id="c2c" data-key="c2c"></textarea></div><div class="field"><label for="c2d">My prompt...</label><textarea id="c2d" data-key="c2d"></textarea></div></div>
+    <p>Use your prompt to generate <strong>one</strong> numeracy problem appropriate for a specific class.</p>
+    <div class="qs"><div class="field"><label for="c2e">The class (year level or phase) and subject...</label><textarea id="c2e" data-key="c2e"></textarea></div><div class="field"><label for="c2f">The problem the AI generated (paste it here; fictional or general content only)...</label><textarea id="c2f" data-key="c2f"></textarea></div></div>
+    <p><strong>Rate the generated problem</strong> from 1 (low) to 5 (high) on each criterion.</p>
+    
+    <div class="item"><p class="q">Assumed knowledge from students is appropriate</p><div class="yn" role="group" aria-label="Rating: assumed knowledge" data-key="c2r1" data-label="Rating: assumed knowledge" data-opts="1|2|3|4|5"></div></div>
+    <div class="item"><p class="q">Relevance to my students</p><div class="yn" role="group" aria-label="Rating: relevance" data-key="c2r2" data-label="Rating: relevance" data-opts="1|2|3|4|5"></div></div>
+    <div class="item"><p class="q">Opportunities for students to understand and represent information, apply mathematics in context, and reason about and justify solutions</p><div class="yn" role="group" aria-label="Rating: opportunities to apply reasoning" data-key="c2r3" data-label="Rating: opportunities to apply reasoning" data-opts="1|2|3|4|5"></div></div>
+    <div class="item"><p class="q">Overall, is the task...</p><div class="yn" role="group" aria-label="Overall judgement of the generated task" data-key="c2o" data-label="Overall judgement of the generated task" data-opts="Appropriate|Appropriate after modifications|Not appropriate"></div></div>
+    <div class="qs"><div class="field"><label for="c2m">If it needs modifications, specify them...</label><textarea id="c2m" data-key="c2m"></textarea></div></div>
+    <div class="ph" role="note"><strong>Placeholder - Worked example: a prompt, an AI-generated problem, and a model evaluation</strong></div>
+  </div>
+  <h3>Improving the prompt</h3>
+  <div class="ph" role="note"><strong>Placeholder - Short input on improving prompts (Blake to confirm whether this sits online or in the live session). The live session compares prompts and asks for a list of ten possible tasks.</strong></div>
+</section>
+
+<section class="block" id="concept-3">
+  <h2>Concept 3: Using generative AI to produce resources</h2>
+  <h3 class="auto-title">Solve it yourself and decide what you are looking for</h3>
+  <div class="auto">
+    <p>Choose the problem you evaluated in Concept 2. Attempt it yourself first.</p>
+    <div class="qs"><div class="field"><label for="c3a">How I solved it...</label><textarea id="c3a" data-key="c3a"></textarea></div><div class="field"><label for="c3b">How different students might approach the task, and what challenges they might meet...</label><textarea id="c3b" data-key="c3b"></textarea></div><div class="field"><label for="c3c">What additional supports some students may need...</label><textarea id="c3c" data-key="c3c"></textarea></div><div class="field"><label for="c3d">How a student could engage with the problem in a more advanced way...</label><textarea id="c3d" data-key="c3d"></textarea></div></div>
+    <p><strong>State your intended learning before you use AI for resources or rubrics.</strong></p>
+    <div class="qs"><div class="field"><label for="c3e">The key skills and understandings I am looking for from students...</label><textarea id="c3e" data-key="c3e"></textarea></div><div class="field"><label for="c3f">What would distinguish strong from satisfactory achievement...</label><textarea id="c3f" data-key="c3f"></textarea></div></div>
+    
+    <div class="item"><p class="q">How confident are you in supporting students who lack the knowledge this problem needs?</p><div class="yn" role="group" aria-label="Confidence supporting students who lack the necessary knowledge" data-key="c3conf" data-label="Confidence supporting students who lack the necessary knowledge" data-opts="1|2|3|4|5"></div></div>
+    <div class="qs"><div class="field"><label for="c3g">If you are confident, the approach I would take with these students...</label><textarea id="c3g" data-key="c3g"></textarea></div></div>
+  </div>
+</section>
+
+<section class="block" id="express">
+  <h2>Where might AI help, and what concerns you?</h2>
+  <p>Look back at your ratings. Where do you lack confidence, and where might AI help?</p>
+  <div class="qs"><div class="field"><label for="e1">Where I hope AI may be useful, in the elements where I lack confidence...</label><textarea id="e1" data-key="e1"></textarea></div><div class="field"><label for="e2">My concerns about using AI to support the teaching of numeracy...</label><textarea id="e2" data-key="e2"></textarea></div></div>
+  <div class="callout"><p><strong>Share before the live session.</strong> Post a short version to the programme shared space.</p>
+  <div class="tools"><button type="button" class="btn" data-export>Download my responses</button><span class="status">Everything you enter on this page is saved on this device only. This file includes all of it.</span></div></div>
+  <div class="ph" role="note"><strong>Placeholder - Padlet or approved shared discussion space</strong></div>
+</section>
+
+<section class="block" id="after">
+  <h2>After the live session</h2>
+  <p>Return to this page after the live session and add:</p>
+  <div class="qs"><div class="field"><label for="a1">Where AI was particularly effective, and the challenges I experienced...</label><textarea id="a1" data-key="a1"></textarea></div><div class="field"><label for="a2">When continued prompting was the best way to progress, and when it would have been better to take control of the refinement myself...</label><textarea id="a2" data-key="a2"></textarea></div><div class="field"><label for="a3">The teacher&rsquo;s role in using generated resources effectively with learners...</label><textarea id="a3" data-key="a3"></textarea></div></div>
+  <div class="ph" role="note"><strong>Placeholder - Echo360 or approved recording link: live session recording</strong></div>
+  <div class="ph" role="note"><strong>Placeholder - PDF of live-session slides</strong></div>
+  
+  <div class="tools"><button type="button" class="btn" data-export>Download my responses</button></div>
+</section>
+
+<section class="block refs" id="references">
+  <h2>References</h2>
+  <p>Pepin, B., Buchholtz, N., &amp; Salinas-Hern&aacute;ndez, U. (2025). A scoping survey of ChatGPT in mathematics education. <em>Digital Experiences in Mathematics Education, 11</em>(1), 9-41. (DOI to be added.)</p>
+  <p>Polya, G. (1945). <em>How to solve it</em>. Princeton University Press.</p>
+  <p>Gerakan Numerasi Nasional, Kementerian Pendidikan Dasar dan Menengah. Launched 19 August 2025. (Official source and link to be confirmed.)</p>
+</section>
+</main></div>
+
+<script>
+(function(){
+  var P='num:';
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  document.querySelectorAll('textarea[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.yn').forEach(function(g){
+    var key=g.dataset.key,cur=get(key);
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.textContent=o;b.setAttribute('aria-pressed',String(cur===o));
+      b.addEventListener('click',function(){var was=b.getAttribute('aria-pressed')==='true';g.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});if(was){set(key,'')}else{b.setAttribute('aria-pressed','true');set(key,o)}});g.appendChild(b)});
+  });
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  var NONE='(no response)';
+  function collect(){
+    var o=['AI-Supported Numeracy Teaching: Using generative AI to generate, evaluate and refine numeracy tasks','My responses (online preparation)',''];
+    document.querySelectorAll('main section.block').forEach(function(sec){
+      if(sec.id==='references')return;
+      o.push(norm(sec.querySelector('h2').textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){var ans;if(el.tagName==='TEXTAREA')ans=el.value.trim();else if(el.classList.contains('yn'))ans=get(el.dataset.key);else return;o.push(labelFor(el),'  '+(ans||NONE))});
+      o.push('');
+    });
+    return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-numeracy.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.35,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+</body>
+</html>

@@ -205,7 +205,24 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
 .fp{display:grid;gap:1rem;margin:1rem 0}
 .fp .field label{font-size:1rem}
 @media (max-width:40rem){.stations{grid-template-columns:1fr}}
-.later{font-style:italic;color:#585270;margin:.9rem 0}</style>
+.later{font-style:italic;color:#585270;margin:.9rem 0}
+details.acc{border:2px solid var(--violet-100);border-left:5px solid var(--violet);border-radius:12px;background:#fff;margin:1rem 0}
+details.acc>summary{cursor:pointer;font-weight:700;color:var(--violet-900);padding:.95rem 1.2rem;font-size:1.02rem}
+details.acc[open]>summary{border-bottom:1px solid var(--violet-100)}
+details.acc .accbody{padding:1rem 1.2rem 1.2rem}
+details.acc .accbody p{margin:.4rem 0 .8rem}
+.tw{overflow-x:auto}
+table.bias{border-collapse:collapse;width:100%;min-width:34rem;font-size:.93rem;margin:.6rem 0}
+table.bias th,table.bias td{border:1px solid var(--violet-100);padding:.55rem .65rem;vertical-align:top;text-align:left}
+table.bias th{background:var(--violet-50)}
+table.bias tr.phase td{background:var(--marker-soft);font-weight:700;color:var(--marker-ink)}
+ol.ctl{padding-left:1.3rem}ol.ctl li{margin-bottom:.7rem}
+.video{max-width:560px;margin:1.4rem 0 .4rem}
+.video .ratio{position:relative;width:100%;padding-bottom:56.25%;background:var(--violet-900);border-radius:8px;overflow:hidden}
+.video iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.vcap{font-size:.88rem;color:var(--muted);margin:.4rem 0 1.4rem;max-width:560px}
+.ask{background:var(--violet-50);border-radius:10px;padding:.8rem 1rem;margin-top:1rem}
+table.bias.bi{min-width:40rem}table.bias.bi td{width:50%}table.bias.bi td ol.ctl{margin:.4rem 0 0}table.bias.bi td ol.ctl li{margin-bottom:.45rem}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -270,7 +287,7 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
         </div>
         <div class="tools"><span class="status">Everything you enter is saved on this device only.</span></div>
       </div>
-      <div class="ph" role="note"><strong>Placeholder - Padlet embed: A time a technology made a decision about me, my students or my community</strong></div>
+      <div class="padlet-embed" style="border:1px solid rgba(0,0,0,0.1);border-radius:2px;box-sizing:border-box;overflow:hidden;position:relative;width:100%;background:#F4F4F4;margin:1.2rem 0"><p style="padding:0;margin:0"><iframe src="https://padlet.com/embed/s024ygdvr70cy6eolji1" title="Shared board" frameborder="0" allow="camera;microphone;geolocation;display-capture;clipboard-write" style="width:100%;height:608px;display:block;padding:0;margin:0"></iframe></p></div>
     </section>
 
     <section class="block" id="readiness">
@@ -298,8 +315,52 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
       <div class="comp">
         <p>A short explainer on how generative AI predicts text from patterns in its training data, followed by an annotated one-page summary of sources of bias across the model life cycle (<a class="cite" href="#ref-lee">Lee et al., 2024</a>) and UNESCO&rsquo;s account of generative AI controversies (<a class="cite" href="#ref-miao">Miao &amp; Holmes, 2023</a>).</p>
       </div>
-      <div class="ph" role="note"><strong>Placeholder - Explainer video: how generative AI predicts text (about seven minutes)</strong></div>
-      <div class="ph" role="note"><strong>Placeholder - Annotated one-page summary: sources of bias across the model life cycle</strong></div>
+      <div class="video"><div class="ratio"><iframe src="https://www.youtube.com/embed/LPZh9BOjkQs?rel=0" title="Large Language Models explained briefly (3Blue1Brown), about 8 minutes" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div>
+      <p class="vcap">Video: how a language model predicts text, about 8 minutes (<a class="cite" href="#ref-3b1b">3Blue1Brown, 2024</a>). Captions are available in the video settings.</p>
+      <details class="acc">
+        <summary>One-page summary: where bias can enter the life of an AI language model</summary>
+        <div class="accbody">
+          <p>Lee et al. (<a class="cite" href="#ref-lee">2024</a>) follow a language model from its first data to a classroom tool. At each step a different kind of bias can enter, and the same kind can enter more than once. Read the seven steps, then use the notes at the end.</p>
+          <div class="tw"><table class="bias">
+            <thead><tr><th scope="col">Step</th><th scope="col">What happens</th><th scope="col">Where bias can enter</th></tr></thead>
+            <tbody>
+              <tr class="phase"><td colspan="3">Phase 1: Building the base model</td></tr>
+              <tr><th scope="row">1. Collecting and cleaning text</th><td>The model learns from a huge amount of text copied from the internet. Duplicates, noisy text and harmful content are filtered out.</td><td>The text reflects past and present discrimination. Some languages, groups and sources are over-represented and others are missing, for example much more English than other languages. People and tools decide what counts as harmful, and their views shape those choices.</td></tr>
+              <tr><th scope="row">2. Pre-training</th><td>The model practises predicting the next word, again and again, and adjusts itself each time it is wrong.</td><td>It can strengthen patterns that are in the data. It may also work better for some languages or groups than for others.</td></tr>
+              <tr><th scope="row">3. Fine-tuning with human feedback (optional)</th><td>People rank answers for being helpful and harmless, and the model is adjusted to match.</td><td>The raters&rsquo; backgrounds and unclear instructions can shape what the model treats as good. Words such as &ldquo;harmless&rdquo; mean different things to different raters.</td></tr>
+              <tr><th scope="row">4. Testing the base model</th><td>Developers test it with benchmark sets, and sometimes with &ldquo;red teams&rdquo; who try to make it fail.</td><td>The tests may not represent all users. Which tests and testers are chosen can change the conclusion.</td></tr>
+              <tr class="phase"><td colspan="3">Phase 2: Making a classroom tool</td></tr>
+              <tr><th scope="row">5. Customising</th><td>The model is adjusted for a purpose: extra training on education data, carefully written prompts, or documents it can search.</td><td>Small education datasets can reflect narrow views. The model can become over-specialised and forget general knowledge. The wording or order of examples in a prompt can nudge answers, and search can favour some content over other content.</td></tr>
+              <tr><th scope="row">6. Deploying</th><td>The tool is put into use with students or teachers.</td><td>People may use it differently from how it was designed, for example students sharing a tool made for one person. A fluent, friendly tool can lead people to trust it too much. Text written by AI is now returning to the web and may feed future models.</td></tr>
+              <tr><th scope="row">7. Feeding a bigger system (optional)</th><td>The output becomes the input to another system, such as one that scores an essay and then writes feedback.</td><td>Problems from earlier steps carry through into the final result.</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Three points to take from the paper</strong></p>
+          <ol class="ctl">
+            <li>The same kind of bias can enter at several steps. A base model that has been checked carefully can still pick up bias when it is customised.</li>
+            <li>Checking the finished tool that people will actually use is arguably the most important step.</li>
+            <li>The steps give you questions to ask a developer: how was each one done, and by whom?</li>
+          </ol>
+          <div class="ask"><strong>Ask yourself.</strong> Which step matters most for your students and your language? What would you want to ask the developer of a tool you use?</div>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>UNESCO&rsquo;s eight controversies about generative AI</summary>
+        <div class="accbody">
+          <p>UNESCO&rsquo;s guidance (<a class="cite" href="#ref-miao">Miao &amp; Holmes, 2023</a>) names eight controversies. These are short plain-language summaries. The full text is in the guidance.</p>
+          <ol class="ctl">
+            <li><strong>Worsening digital poverty.</strong> Access to the tools is unequal, and learners should look critically at the values and customs built into the models.</li>
+            <li><strong>Outpacing national regulatory adaptation.</strong> Laws and rules lag behind how fast the tools develop, so it is hard to govern the legal and ethical issues.</li>
+            <li><strong>Use of content without consent.</strong> Models are built from data scraped from the internet, usually without the owner&rsquo;s permission.</li>
+            <li><strong>Unexplainable models used to generate outputs.</strong> It is often not possible to explain how a model produced a particular output.</li>
+            <li><strong>AI-generated content polluting the internet.</strong> Content written by AI is spreading across the web.</li>
+            <li><strong>Lack of understanding of the real world.</strong> The models repeat language patterns from their training data without understanding what the words mean.</li>
+            <li><strong>Reducing the diversity of opinions and deepening marginalisation of voices.</strong> Because the models learn from web pages and social media, they can further marginalise people who are already disadvantaged.</li>
+            <li><strong>Generating deepfakes.</strong> Realistic fake images, audio and video are easier to make.</li>
+          </ol>
+          <div class="ask"><strong>Ask yourself.</strong> Which of these is closest to what you see in your students&rsquo; daily lives?</div>
+        </div>
+      </details>
     </section>
 
     <section class="block" id="concept-2">
@@ -315,7 +376,16 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
       <div class="comp">
         <p>A one page bilingual digest of the ethics sections of the Kemendikdasmen guide for teachers (<a class="cite" href="#ref-bskap">BSKAP, 2025</a>) and a visual of the AI Assessment Scale (<a class="cite" href="#ref-perkins">Perkins et al., 2024</a>).</p>
       </div>
-      <div class="ph" role="note"><strong>Placeholder - Bilingual one-page digest: ethics sections of the Kemendikdasmen guide for teachers</strong></div>
+      <details class="acc">
+        <summary>One-page digest: ethics in the Guide for Teachers / Ringkasan satu halaman: etika dalam Panduan untuk Guru</summary>
+        <div class="accbody">
+          <p>This digest summarises the ethics parts of the Ministry&rsquo;s <em>Guide to the use of artificial intelligence for teachers</em> (<a class="cite" href="#ref-bskap">BSKAP, 2025</a>). It is a summary by the programme team, so please read the Guide itself for the full text. <span lang="id">Ringkasan ini merangkum bagian etika dari Panduan Pemanfaatan Kecerdasan Artifisial untuk Guru (<a class="cite" href="#ref-bskap">BSKAP, 2025</a>). Ini adalah ringkasan tim program, jadi silakan membaca Panduan itu sendiri untuk teks lengkapnya.</span></p>
+          <div class="tw"><table class="bias bi">
+            <thead><tr><th scope="col">English</th><th scope="col" lang="id">Bahasa Indonesia</th></tr></thead>
+            <tbody><tr><td><strong>Where ethics appears.</strong> The Guide covers AI ethics in Chapter 3 (sections B and C, pp. 42 to 47) and the principles for teachers in Chapter 4 (section B, pp. 50 to 52). Two boxes on data and consent are on pp. 58 and 71.</td><td lang="id"><strong>Di mana etika dibahas.</strong> Panduan membahas etika KA pada Bab 3 (bagian B dan C, hlm. 42 sampai 47) dan prinsip bagi guru pada Bab 4 (bagian B, hlm. 50 sampai 52). Dua kotak tentang data dan persetujuan ada di hlm. 58 dan 71.</td></tr><tr><td><strong>Frameworks it draws on.</strong> UNESCO&rsquo;s Recommendation on the Ethics of AI (2021): four values (human rights and dignity, the environment, diversity and inclusiveness, peaceful and just societies) and ten principles, including do no harm, safety, fairness and non-discrimination, privacy and data protection, human oversight, transparency, responsibility and accountability, and awareness and literacy. UNESCO&rsquo;s AI Competency Framework for Teachers (2024), which sets three levels of AI ethics for teachers. Indonesia&rsquo;s Circular Letter No. 9 of 2023 on AI ethics.</td><td lang="id"><strong>Kerangka yang dirujuk.</strong> Rekomendasi UNESCO tentang Etika KA (2021): empat nilai (hak asasi manusia dan martabat, lingkungan, keberagaman dan inklusivitas, masyarakat yang damai dan adil) dan sepuluh prinsip, antara lain tidak membahayakan, keselamatan, keadilan dan non-diskriminasi, privasi dan perlindungan data, pengawasan oleh manusia, transparansi, tanggung jawab dan akuntabilitas, serta kesadaran dan literasi. Kerangka Kompetensi KA untuk Guru dari UNESCO (2024), yang menetapkan tiga tingkat etika KA bagi guru. Surat Edaran No. 9 Tahun 2023 tentang Etika Kecerdasan Artifisial.</td></tr><tr><td><strong>The guiding idea.</strong> In Indonesia, AI ethics should rest on the values and moral standards of society. The Guide uses the saying <em>adab sebelum ilmu</em> (good conduct before knowledge). Discipline, responsibility, integrity and the ability to cooperate help people use AI wisely.</td><td lang="id"><strong>Gagasan pemandu.</strong> Di Indonesia, etika KA harus berlandaskan nilai dan standar moral masyarakat. Panduan menggunakan kaidah <em>adab sebelum ilmu</em>. Disiplin, tanggung jawab, integritas, dan kemampuan bekerja sama membantu pengguna memanfaatkan KA dengan bijak.</td></tr><tr><td><strong>Seven ethics for AI in education.</strong><ol class="ctl"><li>Be disciplined about your own thinking. Use AI as a tool, and use your own reasoning to solve problems.</li><li>Think critically and check accuracy. A chatbot is not an encyclopaedia. Compare it with verified sources.</li><li>Understand bias. Chatbots learn from human data, so their output can reflect the same bias.</li><li>Know what you may and may not do. For example, do not put a person&rsquo;s face or voice into content without their consent.</li><li>Protect academic integrity. Copying a chatbot&rsquo;s answer into your own writing is plagiarism.</li><li>Understand privacy. What you enter into an AI tool is generally treated as public. Entering personal data is an ethics violation and can be a crime.</li><li>Prevent and manage dependence. Ask yourself: am I using AI to avoid difficulty, or to overcome it?</li></ol></td><td lang="id"><strong>Tujuh etika KA di lingkungan pendidikan.</strong><ol class="ctl"><li>Disiplin melatih kemampuan berpikir. Posisikan KA sebagai alat bantu, dan gunakan penalaran Anda sendiri untuk memecahkan masalah.</li><li>Berpikir kritis dan cek akurasi. Chatbot bukan ensiklopedia. Bandingkan dengan sumber yang terverifikasi.</li><li>Pahami risiko bias. Chatbot belajar dari data manusia, sehingga keluarannya dapat mencerminkan bias yang sama.</li><li>Pahami apa yang boleh dan tidak boleh dilakukan. Misalnya, jangan memasukkan wajah atau suara seseorang ke dalam konten tanpa persetujuannya.</li><li>Jaga integritas akademik. Menyalin jawaban chatbot ke tulisan sendiri adalah plagiat.</li><li>Pahami risiko kebocoran data pribadi. Apa yang dimasukkan ke perkakas KA pada umumnya dianggap data publik. Memasukkan data pribadi adalah pelanggaran etika dan dapat berujung pidana.</li><li>Cegah dan tangani ketergantungan. Tanyakan pada diri sendiri: apakah saya memakai KA untuk menghindari kesulitan, atau untuk mengatasinya?</li></ol></td></tr><tr><td><strong>Six principles for teachers.</strong><ol class="ctl"><li>Human-centred. AI is a tool, people stay the main decision-makers, and AI should strengthen human interaction, not replace it.</li><li>Understand the risks and apply AI ethics.</li><li>Build knowledge and skills in AI, including choosing safe tools that suit your teaching.</li><li>Keep learning. AI changes quickly, so keep developing professionally.</li><li>Adjust the learning process (strategies, media, tasks) to encourage creativity and avoid dependence.</li><li>Evaluate continuously. Keep your own judgement, check accuracy, relevance and bias, and review the effects of AI use regularly.</li></ol></td><td lang="id"><strong>Enam prinsip bagi guru.</strong><ol class="ctl"><li>Berpusat pada manusia. KA adalah alat bantu, manusia tetap pengambil keputusan utama, dan KA harus memperkuat interaksi antarmanusia, bukan menggantikannya.</li><li>Pahami risiko KA dan terapkan etika KA.</li><li>Miliki pengetahuan dan keterampilan KA, termasuk memilih alat yang aman dan sesuai dengan kebutuhan pembelajaran.</li><li>Terus belajar. KA berkembang sangat cepat, sehingga guru perlu mengembangkan diri secara berkelanjutan.</li><li>Sesuaikan proses pembelajaran (strategi, media, tugas) untuk mendorong kreativitas dan menghindari ketergantungan.</li><li>Evaluasi secara berkelanjutan. Jaga otonomi, periksa akurasi, relevansi, dan bias, serta tinjau dampak penggunaan KA secara rutin.</li></ol></td></tr><tr><td><strong>Using a chatbot safely.</strong> The Guide, drawing on UNESCO, asks three questions. Does it matter if the output is correct? Do you have the expertise to check it? Are you willing to take responsibility if it is wrong? If it matters and you cannot check it, or will not take responsibility, it is not safe to use. It also lists six checks: no personal or confidential data in the prompt; check the facts; check for bias or discrimination; check for harmful information; check for intellectual property problems; and make sure text for students is clear and at their language level.</td><td lang="id"><strong>Menggunakan chatbot dengan aman.</strong> Panduan, yang merujuk UNESCO, mengajukan tiga pertanyaan. Apakah penting jika hasilnya benar? Apakah Anda memiliki keahlian untuk memeriksa keakurasiannya? Apakah Anda bersedia bertanggung jawab jika hasilnya tidak akurat? Jika hasilnya penting dan Anda tidak dapat memeriksanya, atau tidak bersedia bertanggung jawab, maka tidak aman untuk digunakan. Panduan juga memuat enam pemeriksaan: tidak ada data pribadi atau rahasia pada prompt; periksa kebenaran informasi; periksa bias atau diskriminasi; periksa informasi berbahaya; periksa pelanggaran hak kekayaan intelektual; dan pastikan teks untuk murid jelas dan sesuai tingkat bahasa mereka.</td></tr><tr><td><strong>Student data and consent.</strong> Before using AI that involves student data, schools and teachers must get permission from parents or guardians, and explain what data will be used, why, and how it will be kept safe. Protecting student data is an absolute priority. Do not enter full names, ID numbers or addresses into third-party AI systems. Use anonymous codes or serial numbers instead.</td><td lang="id"><strong>Data murid dan persetujuan.</strong> Sebelum menerapkan KA yang melibatkan data murid, sekolah dan guru wajib memperoleh izin dari orang tua atau wali, serta menjelaskan data apa yang akan diolah, untuk apa, dan bagaimana data diamankan. Perlindungan data pribadi murid adalah prioritas absolut. Jangan memasukkan nama lengkap, nomor induk, atau alamat ke sistem KA pihak ketiga. Gunakan kode anonim atau nomor urut sebagai pengganti.</td></tr><tr><td><strong>AI in assessment.</strong> Tell students or parents when AI is used for assessment. Verify every AI result before using it. Adapt content to the class and the learning outcomes. Combine digital assessment with direct observation and student reflection.</td><td lang="id"><strong>KA dalam penilaian.</strong> Beri tahu murid atau orang tua bahwa KA dipakai untuk asesmen. Verifikasi semua hasil dari KA sebelum digunakan. Sesuaikan konten dengan konteks kelas dan capaian pembelajaran. Gabungkan hasil penilaian digital dengan pengamatan langsung dan refleksi murid.</td></tr></tbody>
+          </table></div>
+        </div>
+      </details>
       <figure class="info">
         <button type="button" data-zoom aria-label="Enlarge the AI Assessment Scale"><img id="aias" alt="The AI Assessment Scale (AIAS) version 2.1. Five levels: 1 No AI, 2 AI Planning, 3 AI Collaboration, 4 Full AI, 5 AI Exploration, each with a description of the role of AI in the task."></button>
         <figcaption>AI Assessment Scale (AIAS) v2.1 &copy; 2026 Learning Innovation Practice Ltd. Based on the original AIAS by Perkins, Furze, Roe &amp; MacVaugh. Free to use on a non-commercial basis (CC BY-NC-SA).</figcaption>
@@ -331,7 +401,7 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
         </div>
         <div class="tools"><button type="button" class="btn" data-export>Download my responses</button><span class="status">Everything you enter on this page is saved on this device only. This file includes all of it.</span></div>
       </div>
-      <div class="ph" role="note"><strong>Placeholder - Padlet embed: my question or tension for the live session</strong></div>
+      <div class="padlet-embed" style="border:1px solid rgba(0,0,0,0.1);border-radius:2px;box-sizing:border-box;overflow:hidden;position:relative;width:100%;background:#F4F4F4;margin:1.2rem 0"><p style="padding:0;margin:0"><iframe src="https://padlet.com/embed/s024yge5w53lox6gubda" title="Shared board" frameborder="0" allow="camera;microphone;geolocation;display-capture;clipboard-write" style="width:100%;height:608px;display:block;padding:0;margin:0"></iframe></p></div>
     </section>
 
     <section class="block" id="after">
@@ -353,6 +423,7 @@ dialog .btn{position:absolute;top:.75rem;right:.75rem}
 
     <section class="block refs" id="references">
       <h2>References</h2>
+      <p id="ref-3b1b">3Blue1Brown. (2024). <em>Large language models explained briefly</em> [Video]. YouTube. <a href="https://www.youtube.com/watch?v=LPZh9BOjkQs" target="_blank" rel="noopener">https://www.youtube.com/watch?v=LPZh9BOjkQs</a></p>
       <p id="ref-bskap">Badan Standar, Kurikulum, dan Asesmen Pendidikan. (2025). <em>Panduan pemanfaatan kecerdasan artifisial untuk guru</em> [Guide to the use of artificial intelligence for teachers]. Kementerian Pendidikan Dasar dan Menengah. <a href="https://repositori.kemendikdasmen.go.id/36443/" target="_blank" rel="noopener">https://repositori.kemendikdasmen.go.id/36443/</a></p>
       <p id="ref-baker">Baker, R. S., &amp; Hawn, A. (2022). Algorithmic bias in education. <em>International Journal of Artificial Intelligence in Education, 32</em>(4), 1052–1092. <a href="https://doi.org/10.1007/s40593-021-00285-9" target="_blank" rel="noopener">https://doi.org/10.1007/s40593-021-00285-9</a></p>
       <p id="ref-aias">Learning Innovation Practice Ltd. (2026). <em>AI Assessment Scale (AIAS) v2.1</em>. Based on the original AIAS by Perkins, Furze, Roe &amp; MacVaugh. <a href="https://aiassessmentscale.com/" target="_blank" rel="noopener">https://aiassessmentscale.com/</a></p>
